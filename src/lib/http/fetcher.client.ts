@@ -8,11 +8,11 @@ export type FetcherOptions = {
 
 export const fetcher = async <T = unknown>(
   endpoint: string,
+  method: "get" | "post" | "put" | "delete" | "patch" = "get",
   options: FetcherOptions = {}
 ): Promise<T> => {
-  // Tạo AbortController nếu chưa có
   const controller = options.signal ? undefined : createAbortController();
   const signal = options.signal || controller?.signal;
-  const response = await http(endpoint, { ...options, signal });
+  const response = await http[method](endpoint, { ...options, signal });
   return response.json<T>();
 };

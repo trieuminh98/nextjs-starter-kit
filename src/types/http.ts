@@ -6,12 +6,14 @@ export type HttpConfig = {
 };
 
 export type HttpResponse<T = unknown> = {
+  ok: boolean;
   data: T;
   status: number;
   headers: Headers;
 };
 
 export type HttpError = {
+  ok: boolean;
   message: string;
   status?: number;
   data?: unknown;
