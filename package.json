@@ -39,5 +39,9 @@
     "lint-staged": "^16.1.2",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "packageManager": "pnpm@10.13.1",
+  "engines": {
+    "node": ">=22.0.0"
   }
 }
