@@ -1,5 +1,4 @@
-// Fetcher for React Query using ky instance
-
+"use server";
 import { HttpError, HttpResponse } from "@/types/http";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "";

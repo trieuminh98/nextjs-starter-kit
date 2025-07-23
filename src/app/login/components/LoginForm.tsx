@@ -3,7 +3,6 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { login } from "@/services/auth.service";
-import { HttpError } from "@/types/http";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -19,11 +18,12 @@ export default function LoginForm() {
     startTransition(async () => {
       try {
         const data = await login(email, password);
+        console.log(data);
         if (data.ok) {
           router.push("/");
         }
       } catch (error) {
-        setError(JSON.parse((error as Error).message).status);
+        setError(JSON.parse((error as Error).message).message);
       }
     });
   };

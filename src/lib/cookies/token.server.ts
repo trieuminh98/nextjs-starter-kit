@@ -1,3 +1,4 @@
+"use server";
 import { KEYS } from "@/types/key";
 import { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { cookies } from "next/headers";

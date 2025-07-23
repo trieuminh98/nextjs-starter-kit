@@ -2,7 +2,8 @@
 
 import { setTokenServer } from "@/lib/cookies/token.server";
 import { fetcher } from "@/lib/http/fetcher.server";
-import { HttpError } from "@/types/http";
+import { KEYS } from "@/types/key";
+import { cookies } from "next/headers";
 
 type LoginResponse = {
   accessToken: string;
@@ -14,7 +15,14 @@ export const login = async (email: string, password: string) => {
       body: JSON.stringify({ email, password }),
     });
     if (res.ok) {
-      setTokenServer("jwtToken", res.data.accessToken);
+      const cookieStore = await cookies();
+      cookieStore.set({
+        name: KEYS.JWT_TOKEN,
+        value: res.data.accessToken,
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+      });
     }
     return res;
   } catch (error: unknown) {
