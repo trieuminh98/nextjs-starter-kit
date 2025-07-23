@@ -18,8 +18,7 @@ export default function LoginForm() {
     startTransition(async () => {
       try {
         const data = await login(email, password);
-        console.log(data);
-        if (data.ok) {
+        if (data) {
           router.push("/");
         }
       } catch (error) {

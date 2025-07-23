@@ -1,7 +1,6 @@
 "use server";
 
-import { setTokenServer } from "@/lib/cookies/token.server";
-import { fetcher } from "@/lib/http/fetcher.server";
+import { fetcher } from "@/lib/http/fetcher";
 import { KEYS } from "@/types/key";
 import { cookies } from "next/headers";
 
@@ -12,14 +11,14 @@ type LoginResponse = {
 export const login = async (email: string, password: string) => {
   try {
     const res = await fetcher<LoginResponse>("api/auth/signin", "post", {
-      body: JSON.stringify({ email, password }),
+      data: { email, password },
     });
-    if (res.ok) {
+    console.log("res", res.accessToken);
+    if (res) {
       const cookieStore = await cookies();
       cookieStore.set({
         name: KEYS.JWT_TOKEN,
-        value: res.data.accessToken,
-        httpOnly: true,
+        value: res.accessToken,
         sameSite: "lax",
         path: "/",
       });

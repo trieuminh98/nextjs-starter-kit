@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
+  // Delay 5s
+  await new Promise((resolve) => setTimeout(resolve, 500));
   const auth = req.headers.get("authorization");
-  // Kiểm tra Bearer token (mock: chỉ chấp nhận 'mocked-jwt-token')
   if (
     auth &&
     auth.startsWith("Bearer ") &&
