@@ -9,11 +9,16 @@
     "serve": "next build && next start -p 4000",
     "lint": "next lint",
     "prepare": "husky",
-    "commitlint": "commitlint --edit"
+    "commitlint": "commitlint --edit",
+    "svgo": "svgo -f ./public -o ./public"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix --max-warnings=0"
+    ],
+    "*.svg": [
+      "svgo --config=svgo.config.mjs",
+      "git add"
     ]
   },
   "dependencies": {
