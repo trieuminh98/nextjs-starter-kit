@@ -9,8 +9,7 @@
     "serve": "next build && next start -p 4000",
     "lint": "next lint",
     "prepare": "husky",
-    "commitlint": "commitlint --edit",
-    "svgo": "svgo -f ./public -o ./public"
+    "commitlint": "commitlint --edit"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
