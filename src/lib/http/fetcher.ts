@@ -11,13 +11,31 @@ export const fetcher = async <T = unknown>(
   const { signal, ...rest } = options;
   const controller = signal ? undefined : new AbortController();
   const finalSignal = signal || controller?.signal;
-  const response = await http.request<T>({
-    url: endpoint,
-    method,
-    signal: finalSignal,
-    ...rest,
+  const response = await measureAsync(endpoint, () => {
+    return http.request<T>({
+      url: endpoint,
+      method,
+      signal: finalSignal,
+      ...rest,
+    });
   });
   return response.data;
+};
+
+const measureAsync = async <T>(
+  name: string,
+  fn: () => Promise<T>
+): Promise<T> => {
+  performance.mark(`${name}-start`);
+  try {
+    return await fn();
+  } finally {
+    performance.mark(`${name}-end`);
+    performance.measure(name, `${name}-start`, `${name}-end`);
+    const [entry] = performance.getEntriesByName(name);
+    console.log(`⏱️ ${name}: ${entry.duration.toFixed(3)}ms`);
+    performance.clearMarks();
+  }
 };
 
 export const racePromise = async <T>(
