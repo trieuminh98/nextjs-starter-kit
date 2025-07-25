@@ -13,7 +13,8 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "eslint --fix --max-warnings=0"
+      "eslint --fix --max-warnings=0",
+      "prettier . --check --experimental-cli"
     ],
     "*.svg": [
       "svgo --config=svgo.config.mjs",
@@ -42,6 +43,7 @@
     "eslint-config-next": "15.4.2",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.2",
+    "prettier": "^3.6.2",
     "svgo": "^4.0.0",
     "tailwindcss": "^4",
     "typescript": "^5"
