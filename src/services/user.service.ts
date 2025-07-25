@@ -1,4 +1,4 @@
-import { fetcher } from "@/lib/http/fetcher";
+import { fetcher } from '@/lib/http/fetcher';
 
 type UserInfo = {
   id: number;
@@ -9,7 +9,7 @@ type UserInfo = {
 
 export const getUserInfo = async () => {
   try {
-    const data = await fetcher<UserInfo>("api/auth/userinfo", "get");
+    const data = await fetcher<UserInfo>('api/auth/userinfo', 'get');
     return data;
   } catch (error: unknown) {
     throw error;

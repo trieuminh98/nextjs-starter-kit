@@ -3,7 +3,7 @@ export default {
   multipass: true, // Chạy nhiều vòng tối ưu
   plugins: [
     {
-      name: "preset-default",
+      name: 'preset-default',
       params: {
         overrides: {
           // cleanupIds: false, // Bật nếu muốn giữ nguyên id SVG

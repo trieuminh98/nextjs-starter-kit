@@ -1,18 +1,10 @@
-import { KEYS } from "@/types/key";
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { KEYS } from '@/types/key';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-const publicPaths = ["/login"];
+const publicPaths = ['/login'];
 
-const imageExtensions = [
-  ".svg",
-  ".jpg",
-  ".jpeg",
-  ".png",
-  ".webp",
-  ".gif",
-  ".ico",
-];
+const imageExtensions = ['.svg', '.jpg', '.jpeg', '.png', '.webp', '.gif', '.ico'];
 
 // Cache control function
 function cacheControl(request: NextRequest): NextResponse | null {
@@ -20,19 +12,13 @@ function cacheControl(request: NextRequest): NextResponse | null {
   // Cache static asset
   if (imageExtensions.some((ext) => pathname.endsWith(ext))) {
     const response = NextResponse.next();
-    response.headers.set(
-      "Cache-Control",
-      "public, max-age=600, stale-while-revalidate=60"
-    );
+    response.headers.set('Cache-Control', 'public, max-age=600, stale-while-revalidate=60');
     return response;
   }
   // Cache special pages
-  if (pathname === "/about" || pathname.startsWith("/blog/")) {
+  if (pathname === '/about' || pathname.startsWith('/blog/')) {
     const response = NextResponse.next();
-    response.headers.set(
-      "Cache-Control",
-      "public, max-age=600, stale-while-revalidate=60"
-    );
+    response.headers.set('Cache-Control', 'public, max-age=600, stale-while-revalidate=60');
     return response;
   }
   return null;
@@ -42,7 +28,7 @@ export async function middleware(request: NextRequest) {
   const jwtToken = request.cookies.get(KEYS.JWT_TOKEN)?.value;
   if (publicPaths.includes(request.nextUrl.pathname)) {
     if (jwtToken) {
-      const homeUrl = new URL("/", request.url);
+      const homeUrl = new URL('/', request.url);
       return NextResponse.redirect(homeUrl);
     } else {
       return NextResponse.next();
@@ -51,8 +37,8 @@ export async function middleware(request: NextRequest) {
 
   // Auth check
   if (!jwtToken) {
-    const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("from", request.nextUrl.pathname);
+    const loginUrl = new URL('/login', request.url);
+    loginUrl.searchParams.set('from', request.nextUrl.pathname);
     return NextResponse.redirect(loginUrl);
   }
 
@@ -66,6 +52,6 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     // Exclude API, static, image, favicon, sitemap, robots
-    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
+    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
   ],
 };

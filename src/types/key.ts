@@ -1,3 +1,3 @@
 export enum KEYS {
-  JWT_TOKEN = "jwtToken",
+  JWT_TOKEN = 'jwtToken',
 }

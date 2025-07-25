@@ -1,11 +1,11 @@
 // Fetcher for React Query using ky instance
 
-import { AxiosRequestConfig } from "axios";
-import { http } from "./axiosIntance";
+import { AxiosRequestConfig } from 'axios';
+import { http } from './axiosIntance';
 
 export const fetcher = async <T = unknown>(
   endpoint: string,
-  method: "get" | "post" | "put" | "delete" | "patch" = "get",
+  method: 'get' | 'post' | 'put' | 'delete' | 'patch' = 'get',
   options: AxiosRequestConfig = {}
 ): Promise<T> => {
   const { signal, ...rest } = options;
@@ -22,10 +22,7 @@ export const fetcher = async <T = unknown>(
   return response.data;
 };
 
-const measureAsync = async <T>(
-  name: string,
-  fn: () => Promise<T>
-): Promise<T> => {
+const measureAsync = async <T>(name: string, fn: () => Promise<T>): Promise<T> => {
   performance.mark(`${name}-start`);
   try {
     return await fn();

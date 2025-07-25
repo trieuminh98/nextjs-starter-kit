@@ -1,15 +1,13 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { isClient } from "@/utils/common";
-import { getTokenClient } from "../cookies/token.client";
-import camelcaseKeys from "camelcase-keys";
-import { getTokenServer } from "../cookies/token.server";
-import { KEYS } from "@/types/key";
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { isClient } from '@/utils/common';
+import { getTokenClient } from '../cookies/token.client';
+import camelcaseKeys from 'camelcase-keys';
+import { getTokenServer } from '../cookies/token.server';
+import { KEYS } from '@/types/key';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '';
 
-export const createAxiosInstance = (
-  customConfig: AxiosRequestConfig = {}
-): AxiosInstance => {
+export const createAxiosInstance = (customConfig: AxiosRequestConfig = {}): AxiosInstance => {
   const instance = axios.create({
     baseURL: BASE_URL,
     withCredentials: true,
@@ -23,7 +21,7 @@ export const createAxiosInstance = (
       : await getTokenServer(KEYS.JWT_TOKEN);
     if (token) {
       config.headers = config.headers || {};
-      config.headers["Authorization"] = `Bearer ${token}`;
+      config.headers['Authorization'] = `Bearer ${token}`;
     }
     return config;
   });
@@ -32,8 +30,8 @@ export const createAxiosInstance = (
   instance.interceptors.response.use(
     (response: AxiosResponse) => {
       if (
-        response.headers["content-type"] &&
-        response.headers["content-type"].includes("application/json")
+        response.headers['content-type'] &&
+        response.headers['content-type'].includes('application/json')
       ) {
         response.data = camelcaseKeys(response.data, { deep: true });
       }

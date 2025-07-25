@@ -1,12 +1,12 @@
-"use client";
-import { getUserInfo } from "@/services/user.service";
-import { useQuery } from "@tanstack/react-query";
-import React, { use } from "react";
+'use client';
+import { getUserInfo } from '@/services/user.service';
+import { useQuery } from '@tanstack/react-query';
+import React, { use } from 'react';
 
 const UserInfo = ({ promise }: { promise: Promise<unknown> }) => {
   const promiseData = use(promise);
   const { data } = useQuery({
-    queryKey: ["user-info"],
+    queryKey: ['user-info'],
     queryFn: () => getUserInfo(),
     ...(promiseData ? { initialData: promiseData } : {}),
   });

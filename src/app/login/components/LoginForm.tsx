@@ -1,25 +1,25 @@
 // LoginForm client component for login page
-"use client";
-import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
-import { login } from "@/services/auth.service";
+'use client';
+import { useState, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
+import { login } from '@/services/auth.service';
 
 export default function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
   // Xử lý submit form, gọi service login
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError("");
+    setError('');
     startTransition(async () => {
       try {
         const data = await login(email, password);
         if (data) {
-          router.push("/");
+          router.push('/');
         }
       } catch (error) {
         setError(JSON.parse((error as Error).message).message);
@@ -85,7 +85,7 @@ export default function LoginForm() {
         disabled={isPending}
         aria-busy={isPending}
       >
-        {isPending ? "Đang đăng nhập..." : "Đăng nhập"}
+        {isPending ? 'Đang đăng nhập...' : 'Đăng nhập'}
       </button>
     </form>
   );

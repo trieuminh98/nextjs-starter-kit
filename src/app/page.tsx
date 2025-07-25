@@ -1,9 +1,9 @@
-import { getUserInfo } from "@/services/user.service";
-import UserInfo from "./components/userInfo";
-import { Suspense } from "react";
-import { racePromise } from "@/lib/http/fetcher";
-import VercelInfo from "./components/vercelInfo";
-import Footer from "./components/footer";
+import { getUserInfo } from '@/services/user.service';
+import UserInfo from './components/userInfo';
+import { Suspense } from 'react';
+import { racePromise } from '@/lib/http/fetcher';
+import VercelInfo from './components/vercelInfo';
+import Footer from './components/footer';
 
 export default async function Home() {
   const userPromise = getUserInfo();
