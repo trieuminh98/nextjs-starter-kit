@@ -42,7 +42,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // Cache control
+  // Cache control Test
   const cache = cacheControl(request);
   if (cache) return cache;
 
