@@ -1,8 +1,13 @@
-import React, { PropsWithChildren } from "react";
-import ReactQueryProvider from "./queryClient";
+import React, { PropsWithChildren } from 'react';
+import ReactQueryProvider from './queryClient';
+import AuthProvider from './auth';
 
 const Provider = ({ children }: PropsWithChildren) => {
-  return <ReactQueryProvider>{children}</ReactQueryProvider>;
+  return (
+    <ReactQueryProvider>
+      <AuthProvider>{children}</AuthProvider>
+    </ReactQueryProvider>
+  );
 };
 
 export default Provider;
