@@ -10,12 +10,12 @@
     "lint": "next lint",
     "prepare": "husky",
     "commitlint": "commitlint --edit",
-    "svgo": "svgo -rf ./public -o ./public"
+    "svgo": "svgo -rf ./public -o ./public",
+    "format": "prettier . --write --experimental-cli"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "eslint --fix --max-warnings=0",
-      "prettier . --write --experimental-cli"
+      "eslint --fix --max-warnings=0"
     ]
   },
   "dependencies": {
