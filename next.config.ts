@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
     devtoolSegmentExplorer: true,
     browserDebugInfoInTerminal: true,
   },
+  typedRoutes: true,
 };
 
 export default nextConfig;
