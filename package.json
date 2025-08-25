@@ -11,7 +11,9 @@
     "prepare": "husky",
     "commitlint": "commitlint --edit",
     "svgo": "svgo -rf ./public -o ./public",
-    "format": "prettier . --write --experimental-cli"
+    "format": "prettier . --write --experimental-cli",
+    "type-check": "tsc --noEmit",
+    "next-gen-type": "next typegen && npm run type-check"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
