@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 import { racePromise } from '@/lib/http/fetcher';
 import VercelInfo from './components/vercelInfo';
 import Footer from './components/footer';
+import ComponentWrapper from '@/components/core/componentWrapper';
 
 export default async function Home() {
   const userPromise = getUserInfo();
@@ -15,7 +16,10 @@ export default async function Home() {
         <Suspense fallback={<div>Loading user info...</div>}>
           <UserInfo promise={userPromise} />
         </Suspense>
-        <VercelInfo />
+
+        <ComponentWrapper enableErrorBoundary={true}>
+          <VercelInfo />
+        </ComponentWrapper>
       </main>
       <Footer />
     </div>
