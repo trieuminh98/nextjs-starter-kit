@@ -2,6 +2,19 @@
   "name": "nextjs-starter-kit",
   "version": "0.1.0",
   "private": true,
+  "author": {
+    "name": "Triều Minh",
+    "email": "ttrieuminh1998@gmail.com",
+    "url": "https://github.com/trieuminh98"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/trieuminh98/nextjs-starter-kit"
+  },
+  "homepage": "https://github.com/trieuminh98/nextjs-starter-kit",
+  "bugs": {
+    "url": "https://github.com/trieuminh98/nextjs-starter-kit/issues"
+  },
   "scripts": {
     "dev": "next dev --turbopack -p 4000",
     "build": "next build --turbopack",
@@ -15,7 +28,8 @@
     "type-check": "tsc --noEmit",
     "next-gen-type": "next typegen && npm run type-check",
     "knip": "knip",
-    "fta": "fta src"
+    "fta": "fta src",
+    "clean": "node scripts/clean.ts"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
