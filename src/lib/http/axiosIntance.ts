@@ -3,7 +3,7 @@ import { isClient } from '@/utils/common';
 import { getTokenClient } from '../cookies/token.client';
 import camelcaseKeys from 'camelcase-keys';
 import { getTokenServer } from '../cookies/token.server';
-import { KEYS } from '@/types/key';
+import { KEYS } from '@/constants/key';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '';
 

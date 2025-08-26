@@ -1,4 +1,5 @@
 // components/CustomImage.tsx
+import { ImageQuality } from '@/types/common';
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 import NImage, { ImageProps } from 'next/image';
 import { memo, SyntheticEvent, useCallback, useState } from 'react';
@@ -10,6 +11,7 @@ type CustomImageProps = {
   placeholderType?: 'blur' | 'empty';
   unoptimized?: boolean;
   fallbackImage?: string | StaticImport;
+  quality?: ImageQuality;
 } & ImageProps;
 
 /**

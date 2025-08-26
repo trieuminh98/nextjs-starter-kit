@@ -1,4 +1,4 @@
-import { KEYS } from '@/types/key';
+import { KEYS } from '@/constants/key';
 import Cookies from 'js-cookie';
 
 export const getTokenClient = (key: KEYS): string | null => {

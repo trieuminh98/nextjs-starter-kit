@@ -1,4 +1,4 @@
-import { KEYS } from '@/types/key';
+import { KEYS } from '@/constants/key';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 

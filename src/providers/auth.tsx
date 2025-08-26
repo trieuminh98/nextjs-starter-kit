@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 import { getTokenClient } from '@/lib/cookies/token.client';
-import { KEYS } from '@/types/key';
+import { KEYS } from '@/constants/key';
 import { useRouter } from 'next/navigation';
 import React, { PropsWithChildren, useEffect } from 'react';
 
