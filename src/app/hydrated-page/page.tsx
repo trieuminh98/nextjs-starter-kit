@@ -3,6 +3,7 @@ import { AppConfigs } from '@/services/config.service';
 import UserInfo from '../components/userInfo';
 import VercelInfo from '../components/vercelInfo';
 import Footer from '../components/footer';
+import HydratedPageHydrator from './hydrator';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -43,11 +44,13 @@ export default async function Home() {
             </pre>
           </section>
         </div>
-        {/* Client */}
-        <UserInfo />
-        <ComponentWrapper enableErrorBoundary={true}>
-          <VercelInfo />
-        </ComponentWrapper>
+        {/* Client (hydrated via Jotai) */}
+        <HydratedPageHydrator initialConfigs={configs}>
+          <UserInfo />
+          <ComponentWrapper enableErrorBoundary={true}>
+            <VercelInfo />
+          </ComponentWrapper>
+        </HydratedPageHydrator>
       </main>
       {/* Static */}
       <Footer />
