@@ -29,7 +29,7 @@ export function Image({
   loading = 'lazy',
   width = 100,
   height = 100,
-  fallbackImage = '/icons/product-default-image.png',
+  fallbackImage = '/image-placeholder.png',
   src,
   onError,
   ...rest
