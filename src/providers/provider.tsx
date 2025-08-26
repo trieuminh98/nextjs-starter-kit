@@ -1,11 +1,14 @@
 import React, { PropsWithChildren } from 'react';
 import ReactQueryProvider from './queryClient';
 import AuthProvider from './auth';
+import DevToolProvider from './devTool';
 
 const Provider = ({ children }: PropsWithChildren) => {
   return (
     <ReactQueryProvider>
-      <AuthProvider>{children}</AuthProvider>
+      <DevToolProvider>
+        <AuthProvider>{children}</AuthProvider>
+      </DevToolProvider>
     </ReactQueryProvider>
   );
 };
