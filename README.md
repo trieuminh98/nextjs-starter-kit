@@ -1,230 +1,114 @@
-# Next.js Starter Kit
+# 🚀 Next.js Starter Kit (App Router)
 
-A modern Next.js starter kit with authentication, HTTP client architecture, and comprehensive tooling.
+Opinionated starter focused on clarity and DX. Includes SSR examples, API routes, global state with Jotai, and React Query for server state.
 
-## 🚀 Features
+## ✨ Features
 
-- **Next.js 15** with App Router
-- **TypeScript** for type safety
-- **Tailwind CSS** for styling
-- **React Query** for data fetching
-- **Authentication** with JWT tokens
-- **HTTP Client** with Axios and interceptors
-- **Code Quality** tools (ESLint, Prettier, Husky)
-- **Health Check APIs** for monitoring
-- **SVG Optimization** with SVGO
-- **Git Hooks** with commitlint
+### 🏗️ Core
 
-## 📦 Installation
+- ⚡ Next.js 15 (App Router, Server Components)
+- 🔷 TypeScript (strict)
+- ⚛️ React 19
+
+### 🔌 Data & State
+
+- 🔁 TanStack Query v5 (server state, caching, devtools)
+- 🧪 Axios instance with env-based baseURL (`NEXT_PUBLIC_API_BASE_URL`)
+- 🧊 Jotai global state (Provider wired, hydration example)
+- 🧩 API Routes examples under `src/app/api`
+
+### 🛠️ Dev Experience
+
+- 🧭 React Query Devtools, Jotai DevTools
+- 🛰️ React Scan (dev-only performance overlay)
+- 🧹 ESLint + Prettier
+
+### 🐳 Ops
+
+- 🐳 Dockerfile (multi-stage ready)
+- 🏥 Health endpoints (`/api/health`)
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js 18+
+- pnpm (khuyến nghị)
+
+### Install
 
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd nextjs-starter-kit
-
-# Install dependencies
 pnpm install
 
-# Start development server
+# Dev
 pnpm dev
+
+# Build / Start
+pnpm build && pnpm start
 ```
 
-## 🔧 Scripts
+Visit http://localhost:3000
 
-```bash
-# Development
-pnpm dev          # Start dev server on port 4000
-pnpm build        # Build for production
-pnpm start        # Start production server
-pnpm serve        # Build and start production server
-
-# Code Quality
-pnpm lint         # Run ESLint
-pnpm format       # Format code with Prettier
-
-# Utilities
-pnpm svgo         # Optimize SVG files
-```
-
-## 🔐 Authentication
-
-### Login Flow
-
-- **Endpoint**: `/api/auth/signin`
-- **Method**: POST
-- **Credentials**: `admin@example.com` / `123456`
-- **Response**: JWT token stored in HttpOnly cookie
-
-### Protected Routes
-
-- Middleware checks for `jwtToken` cookie
-- Redirects to `/login` if not authenticated
-- Public paths: `/login`
-
-## 🌐 HTTP Client Architecture
-
-### Features
-
-- **Global instance** with base URL and headers
-- **Request/Response interceptors** for tokens and error handling
-- **Automatic retry** (max 5 attempts)
-- **Request cancellation** support
-- **Isomorphic** (client & server compatible)
-- **Easy replacement** (can switch to other HTTP clients)
-
-## 🏥 Health Check APIs
-
-### Endpoints
-
-#### 1. `/api/health` - Basic Health Check
-
-**GET** - Returns basic system information
-
-```bash
-curl http://localhost:4000/api/health
-```
-
-**Response:**
-
-```json
-{
-  "status": "ok",
-  "timestamp": "2024-01-01T00:00:00.000Z",
-  "uptime": 3600,
-  "environment": "development",
-  "version": "1.0.0"
-}
-```
-
-#### 2. `/api/health/live` - Liveness Check
-
-**GET/HEAD** - Simple check for load balancers
-
-```bash
-curl http://localhost:4000/api/health/live
-```
-
-**Response:**
-
-```json
-{
-  "status": "ok"
-}
-```
-
-### Container Integration
-
-#### Docker Compose
-
-```yaml
-version: '3.8'
-services:
-  app:
-    build: .
-    healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:4000/api/health/live']
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-```
-
-## 🛠️ Development Tools
-
-### Code Quality
-
-- **ESLint** - Code linting with Next.js config
-- **Prettier** - Code formatting
-- **Husky** - Git hooks
-- **lint-staged** - Run linters on staged files
-- **commitlint** - Enforce commit message format
-
-### Commit Message Format
+## 📁 Project Structure
 
 ```
-type: subject
-
-feat: add new feature
-fix: bug fix
-refactor: code refactoring
-docs: documentation changes
-style: formatting changes
-chore: maintenance tasks
+src/
+  app/
+    api/                 # API routes (e.g. /api/configs, /api/auth/...)
+    hydrated-page/       # SSR fetch + hydrate Jotai example
+    components/          # Client components (UserInfo, etc.)
+    layout.tsx           # Root layout
+    page.tsx             # Landing page
+  components/core/       # Core UI helpers (ComponentWrapper, Image)
+  constants/             # Keys, common constants
+  lib/                   # http (axios, fetcher), cookies
+  providers/             # React Query, Auth, DevTools, Provider tree
+  services/              # API services (auth, user, configs)
+  state/                 # Jotai atoms (e.g., configsAtom)
+  types/                 # Shared types
+  utils/                 # Utilities
 ```
-
-### SVG Optimization
-
-- **SVGO** - Automatic SVG optimization
-- Runs before commit via lint-staged
-- Configurable via `svgo.config.mjs`
 
 ## 🔧 Configuration
 
 ### Environment Variables
 
-```env
-NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
-NODE_ENV=development
+Create `.env.local` and set at least:
+
+- `NEXT_PUBLIC_API_BASE_URL` (e.g. http://localhost:3000)
+- Optional ISR for configs demo: `NEXT_PUBLIC_CONFIGS_REVALIDATE=300`
+
+Axios instance reads `NEXT_PUBLIC_API_BASE_URL`. Server-side examples use Next.js `fetch` with ISR/no-store depending on the route.
+
+## 🧭 Notable Examples
+
+- SSR + hydrate to Jotai: `src/app/hydrated-page/page.tsx` → fetch `/api/configs`, render SSR, hydrate into `configsAtom` for client.
+- API mocks: `src/app/api/configs/route.ts`, `src/app/api/auth/*`
+- Global providers: `src/providers/provider.tsx` (Jotai, React Query, DevTools)
+
+## 🧰 Dev Tools
+
+- React Query Devtools and Jotai DevTools are enabled in dev.
+- React Scan is wired in `src/providers/devTool.tsx` (toolbar, optional `trackUnnecessaryRenders`). See project README for options.
+
+## 🧪 Lint & Format
+
+```bash
+pnpm lint
+pnpm format
 ```
 
-### Next.js Config
-
-- **Turbopack** enabled for faster development
-- **Image optimization** with WebP/AVIF support
-- **Experimental features** enabled
-
-## 📊 Monitoring
-
-### Health Check Status Codes
-
-- **200** - Healthy
-- **503** - Unhealthy/Error
-
-### Logging
-
-- Health check failures are logged to console
-- Structured logging for debugging
-
-## 🚀 Deployment
-
-### Build
+## 🐳 Docker
 
 ```bash
 pnpm build
+docker build -t nextjs-starter-kit .
 ```
 
-### Start Production
+## 📄 License
 
-```bash
-pnpm start
-```
-
-### Docker
-
-```dockerfile
-FROM node:22-alpine
-WORKDIR /app
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
-COPY . .
-RUN pnpm build
-EXPOSE 8080
-CMD ["pnpm", "start"]
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests and linting
-5. Commit with conventional format
-6. Create a pull request
-
-## 📝 License
-
-MIT License - see LICENSE file for details
+MIT
 
 ---
 
-**Health Check APIs** provide essential monitoring capabilities for production deployments, container orchestration, and load balancer integration.
+⭐ Star nếu template này hữu ích!
