@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
   images: {
     qualities: IMAGE_QUALITIES, // Explicitly allow quality={25, 50, 75, 100}
   },
+  transpilePackages: ['jotai-devtools'],
 };
 
 export default nextConfig;
