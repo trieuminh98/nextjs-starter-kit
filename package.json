@@ -13,7 +13,8 @@
     "svgo": "svgo -rf ./public -o ./public",
     "format": "prettier . --write --experimental-cli",
     "type-check": "tsc --noEmit",
-    "next-gen-type": "next typegen && npm run type-check"
+    "next-gen-type": "next typegen && npm run type-check",
+    "knip": "knip"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -31,7 +32,8 @@
     "next": "15.5.0",
     "react": "19.1.1",
     "react-dom": "19.1.1",
-    "react-error-boundary": "^6.0.0"
+    "react-error-boundary": "^6.0.0",
+    "react-scan": "^0.4.3"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
@@ -46,6 +48,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.0",
     "husky": "^9.1.7",
+    "knip": "^5.63.0",
     "lint-staged": "^16.1.2",
     "prettier": "^3.6.2",
     "svgo": "^4.0.0",
