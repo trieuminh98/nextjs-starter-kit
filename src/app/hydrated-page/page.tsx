@@ -6,6 +6,7 @@ import HydratedPageHydrator from './hydrator';
 import { getQueryClient } from '@/helper/query-client';
 import { fetchConfigs, pokemonQueries } from './query';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import ToastDemo from '../components/toast-demo';
 
 export default async function Home() {
   const queryClient = getQueryClient();
@@ -27,6 +28,10 @@ export default async function Home() {
             </pre>
           </section>
         </div>
+
+        {/* Global Toast Demo */}
+        <ToastDemo />
+
         <HydrationBoundary state={dehydrate(queryClient)}>
           <HydratedPageHydrator initialPokemon={pokemon}>
             <UserInfo />
