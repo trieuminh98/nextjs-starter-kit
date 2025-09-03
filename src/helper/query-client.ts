@@ -1,30 +1,53 @@
 // Since QueryClientProvider relies on useContext under the hood, we have to put 'use client' on top
-import { isServer, QueryClient } from '@tanstack/react-query';
+import { isServer, MutationCache, QueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 function makeQueryClient() {
-  return new QueryClient({
+  const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
-        // With SSR, we usually want to set some default staleTime
-        // above 0 to avoid refetching immediately on the client
         staleTime: 60 * 1000,
       },
     },
+    mutationCache: new MutationCache({
+      onSuccess: (_data, _variables, _context, mutation) => {
+        // Show success toast if message is provided and not skipped
+        if (mutation.meta?.successMessage && !mutation.meta?.skipToast) {
+          toast.success(mutation.meta.successMessage, {
+            description: mutation.meta.successTitle,
+          });
+        }
+      },
+      onError: (_error, _variables, _context, mutation) => {
+        console.error('Mutation error:', _error);
+        // Show error toast if message is provided and not skipped
+        if (mutation.meta?.errorMessage && !mutation.meta?.skipToast) {
+          toast.error(mutation.meta.errorMessage, {
+            description: mutation.meta.errorTitle,
+          });
+        }
+      },
+      onSettled: (_data, _error, _variables, _context, mutation) => {
+        // Invalidate queries if specified - use the stored queryClient reference
+        if (mutation.meta?.invalidatesQuery) {
+          queryClient.invalidateQueries({
+            queryKey: mutation.meta.invalidatesQuery,
+          });
+        }
+      },
+    }),
   });
+
+  return queryClient;
 }
 
 let browserQueryClient: QueryClient | undefined = undefined;
 
 export function getQueryClient() {
   if (isServer) {
-    // Server: always make a new query client
-    return makeQueryClient();
+    return makeQueryClient(); // Server: always make a new query client
   } else {
-    // Browser: make a new query client if we don't already have one
-    // This is very important, so we don't re-make a new client if React
-    // suspends during the initial render. This may not be needed if we
-    // have a suspense boundary BELOW the creation of the query client
     if (!browserQueryClient) browserQueryClient = makeQueryClient();
-    return browserQueryClient;
+    return browserQueryClient; // Browser: singleton
   }
 }
