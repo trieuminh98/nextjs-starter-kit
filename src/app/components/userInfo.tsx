@@ -1,20 +1,21 @@
 'use client';
-import { getUserInfo } from '@/services/user.service';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import React from 'react';
 import { useAtomValue } from 'jotai';
-import { pokemonOptions } from '../hydrated-page/query';
+import { pokemonQueries, userQueries } from '../hydrated-page/query';
 import { pokemonAtom } from '@/state/pokemon';
 
 const UserInfo = () => {
   const { data } = useQuery({
-    queryKey: ['user-info'],
-    queryFn: () => getUserInfo(),
+    ...userQueries.info,
   });
   const pokemonAtomData = useAtomValue(pokemonAtom);
 
-  const { data: pokemonData } = useSuspenseQuery(pokemonOptions);
-  console.log(pokemonData);
+  // Use the new createQueryKeys pattern
+  const { data: pokemonData } = useSuspenseQuery({
+    ...pokemonQueries.detail(25),
+    initialData: pokemonAtomData,
+  });
 
   return (
     <div className="flex flex-col gap-3">
@@ -33,7 +34,7 @@ const UserInfo = () => {
       <div>
         <div className="font-medium mb-1">Pokemon Data from prefetch query: </div>
         <pre className="text-xs bg-black/5 dark:bg-white/10 rounded p-2">
-          {JSON.stringify(pokemonData.abilities, null, 2)}
+          {JSON.stringify(pokemonData?.abilities, null, 2)}
         </pre>
       </div>
     </div>

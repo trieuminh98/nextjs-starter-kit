@@ -4,14 +4,16 @@ import VercelInfo from '../components/vercelInfo';
 import Footer from '../components/footer';
 import HydratedPageHydrator from './hydrator';
 import { getQueryClient } from '@/helper/query-client';
-import { fetchConfigs, pokemonOptions } from './query';
+import { fetchConfigs, pokemonQueries } from './query';
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 
 export default async function Home() {
   const queryClient = getQueryClient();
 
   const pokemon = await fetchConfigs();
 
-  void queryClient.prefetchQuery(pokemonOptions);
+  // Prefetch pokemon detail query
+  void queryClient.prefetchQuery(pokemonQueries.detail(25));
 
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
@@ -25,13 +27,14 @@ export default async function Home() {
             </pre>
           </section>
         </div>
-        {/* Client (hydrated via Jotai) */}
-        <HydratedPageHydrator intialData={pokemon}>
-          <UserInfo />
-          <ComponentWrapper enableErrorBoundary={true}>
-            <VercelInfo />
-          </ComponentWrapper>
-        </HydratedPageHydrator>
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <HydratedPageHydrator initialPokemon={pokemon}>
+            <UserInfo />
+            <ComponentWrapper enableErrorBoundary={true}>
+              <VercelInfo />
+            </ComponentWrapper>
+          </HydratedPageHydrator>
+        </HydrationBoundary>
       </main>
       {/* Static */}
       <Footer />
