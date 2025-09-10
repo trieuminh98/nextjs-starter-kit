@@ -11,7 +11,7 @@ const Footer = () => {
         rel="noopener noreferrer"
       >
         <Image aria-hidden src="/file.svg" alt="File icon" width={16} height={16} />
-        Learn
+        This is static footer
       </a>
       <a
         className="flex items-center gap-2 hover:underline hover:underline-offset-4"
@@ -20,7 +20,7 @@ const Footer = () => {
         rel="noopener noreferrer"
       >
         <Image aria-hidden src="/window.svg" alt="Window icon" width={16} height={16} />
-        Examples
+        This is static footer
       </a>
       <a
         className="flex items-center gap-2 hover:underline hover:underline-offset-4"
@@ -29,7 +29,7 @@ const Footer = () => {
         rel="noopener noreferrer"
       >
         <Image aria-hidden src="/globe.svg" alt="Globe icon" width={16} height={16} />
-        Go to nextjs.org →
+        This is static footer
       </a>
     </footer>
   );

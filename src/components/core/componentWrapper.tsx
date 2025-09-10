@@ -1,6 +1,7 @@
 'use client';
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, Suspense } from 'react';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface ErrorFallbackProps {
   error: Error;
@@ -10,14 +11,26 @@ interface ErrorFallbackProps {
 interface ComponentWrapperProps extends PropsWithChildren {
   enableErrorBoundary?: boolean;
   errorFallback?: React.ComponentType<FallbackProps>;
-  // Future options can be added here
-  // enableSuspense?: boolean;
-  // enableStrictMode?: boolean;
-  // enableProfiler?: boolean;
+  enableSuspense?: boolean;
 }
 
 const ErrorFallback = ({ error: _error, resetErrorBoundary }: ErrorFallbackProps) => {
-  console.log(_error);
+  const queryClient = useQueryClient();
+
+  const handleReset = () => {
+    // Auto-clear all failed queries
+    queryClient
+      .getQueryCache()
+      .getAll()
+      .forEach((query) => {
+        if (query.state.status === 'error') {
+          queryClient.removeQueries({ queryKey: query.queryKey });
+        }
+      });
+    // Reset error boundary
+    resetErrorBoundary();
+  };
+
   return (
     <div className="max-w-md w-full rounded-lg p-6 text-center">
       {/* Error Icon */}
@@ -42,10 +55,20 @@ const ErrorFallback = ({ error: _error, resetErrorBoundary }: ErrorFallbackProps
         Something went wrong
       </h2>
 
+      {/* Error Details (for debugging) */}
+      {process.env.NODE_ENV === 'development' && (
+        <details className="text-xs text-gray-500 dark:text-gray-400 mb-4">
+          <summary className="cursor-pointer">Error details</summary>
+          <pre className="mt-2 p-2 bg-gray-100 dark:bg-gray-800 rounded text-left overflow-auto">
+            {_error?.message || 'Unknown error'}
+          </pre>
+        </details>
+      )}
+
       {/* Action Buttons */}
       <div className="flex gap-3 justify-center">
         <button
-          onClick={resetErrorBoundary}
+          onClick={handleReset}
           className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
         >
           Try again
@@ -66,7 +89,7 @@ const ErrorFallback = ({ error: _error, resetErrorBoundary }: ErrorFallbackProps
   );
 };
 
-const Component = ({ children }: PropsWithChildren) => {
+const ComponentWrapper = ({ children }: PropsWithChildren) => {
   return (
     <section
       style={{
@@ -79,15 +102,21 @@ const Component = ({ children }: PropsWithChildren) => {
   );
 };
 
-const componentWrapper = ({
+const SuspenseWrapper = ({
   children,
-  enableErrorBoundary = true,
+  enableSuspense,
+}: PropsWithChildren<Pick<ComponentWrapperProps, 'enableSuspense'>>) => {
+  if (enableSuspense) {
+    return <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>;
+  }
+  return children;
+};
+
+const ErrorBoundaryWrapper = ({
+  children,
+  enableErrorBoundary,
   errorFallback,
-  // enableSuspense = false,
-  // enableStrictMode = false,
-  // enableProfiler = false,
-}: ComponentWrapperProps) => {
-  // If ErrorBoundary is disabled, return children directly
+}: PropsWithChildren<Pick<ComponentWrapperProps, 'enableErrorBoundary' | 'errorFallback'>>) => {
   if (enableErrorBoundary) {
     return (
       <ErrorBoundary
@@ -97,12 +126,26 @@ const componentWrapper = ({
           console.error('Error caught by boundary:', error, errorInfo);
         }}
       >
-        <Component>{children}</Component>
+        {children}
       </ErrorBoundary>
     );
   }
-
-  return <Component>{children}</Component>;
+  return children;
 };
 
-export default componentWrapper;
+const ContainerWrapper = ({
+  children,
+  enableErrorBoundary = true,
+  errorFallback,
+  enableSuspense = true,
+}: ComponentWrapperProps) => {
+  return (
+    <ErrorBoundaryWrapper enableErrorBoundary={enableErrorBoundary} errorFallback={errorFallback}>
+      <SuspenseWrapper enableSuspense={enableSuspense}>
+        <ComponentWrapper>{children}</ComponentWrapper>
+      </SuspenseWrapper>
+    </ErrorBoundaryWrapper>
+  );
+};
+
+export default ContainerWrapper;

@@ -2,13 +2,14 @@
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import React from 'react';
 import { useAtomValue } from 'jotai';
-import { pokemonQueries, userQueries } from '../hydrated-page/query';
 import { pokemonAtom } from '@/state/pokemon';
+import { pokemonQueries, userQueries } from '../query';
 
-const UserInfo = () => {
+const HydratePart = () => {
   const { data } = useQuery({
     ...userQueries.info,
   });
+
   const pokemonAtomData = useAtomValue(pokemonAtom);
 
   // Use the new createQueryKeys pattern
@@ -41,4 +42,4 @@ const UserInfo = () => {
   );
 };
 
-export default UserInfo;
+export default HydratePart;

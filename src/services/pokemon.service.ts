@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { http } from '@/lib/http/axiosIntance';
 import { Pokemon } from '@/types/pokemon';
 
 // Mock API functions
@@ -40,7 +42,7 @@ export const updatePokemon = async (
   }
 };
 
-export const deletePokemon = async (): Promise<void> => {
+export const deletePokemon = async (_id: number): Promise<void> => {
   await new Promise((resolve) => setTimeout(resolve, 600));
 
   if (Math.random() > 0.1) {
@@ -48,4 +50,11 @@ export const deletePokemon = async (): Promise<void> => {
   } else {
     throw new Error('Failed to delete Pokemon');
   }
+};
+
+export const getPokemonDetail = async (id: string | number) => {
+  const res = await http.get<Pokemon>(`/pokemon/${id}`, {
+    baseURL: 'https://pokeapi.co/api/v2',
+  });
+  return res.data;
 };
