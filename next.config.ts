@@ -4,6 +4,7 @@ import type { NextConfig } from 'next';
 const IMAGE_QUALITIES: ImageQuality[] = [25, 50, 75, 100];
 
 const nextConfig: NextConfig = {
+  output: 'standalone',
   experimental: {
     devtoolSegmentExplorer: true,
     browserDebugInfoInTerminal: true,

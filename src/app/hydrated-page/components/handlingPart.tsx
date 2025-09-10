@@ -5,7 +5,6 @@ const HandlingPart = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [shouldError, setShouldError] = useState(false);
   const [errorType, setErrorType] = useState<string>('');
-  console.log('render');
 
   const handleSimulateError = async () => {
     setIsLoading(true);

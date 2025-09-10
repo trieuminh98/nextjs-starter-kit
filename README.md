@@ -1,6 +1,6 @@
 # 🚀 Next.js Starter Kit (App Router)
 
-Opinionated starter focused on clarity and DX. Includes SSR examples, API routes, global state with Jotai, and React Query for server state.
+Opinionated starter focused on clarity and DX. Includes nextjs best concept examples, API routes, global state with Jotai, and React Query for server state.
 
 ## ✨ Features
 

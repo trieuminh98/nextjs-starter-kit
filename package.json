@@ -29,7 +29,11 @@
     "next-gen-type": "next typegen && npm run type-check",
     "knip": "knip",
     "fta": "fta src",
-    "clean": "node scripts/clean.ts"
+    "clean": "node scripts/clean.ts",
+    "docker:build": "docker build -t nextjs-starter-kit .",
+    "docker:run": "docker run -p 4000:4000 nextjs-starter-kit",
+    "docker:dev": "docker build -t nextjs-starter-kit . && docker run -p 4000:4000 nextjs-starter-kit",
+    "docker": "bash scripts/docker.sh"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

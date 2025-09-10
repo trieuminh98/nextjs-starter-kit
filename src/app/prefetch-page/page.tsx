@@ -5,6 +5,9 @@ import { pokemonQueries } from './query';
 import ContainerWrapper from '@/components/core/componentWrapper';
 import HydratePart from './components/hydratePart';
 
+// Force dynamic rendering to avoid prerender issues
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   const queryClient = getQueryClient();
 

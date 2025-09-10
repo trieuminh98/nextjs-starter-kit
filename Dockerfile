@@ -1,46 +1,66 @@
-# Install dependencies only when needed
+# Multi-stage Docker build for Next.js application
+# Stage 1: Dependencies
 FROM node:22-alpine AS deps
-
 RUN apk add --no-cache libc6-compat
-WORKDIR /nextjs-starter-kit
-COPY package.json pnpm-lock.yaml ./
+WORKDIR /app
 
-RUN npm install -g pnpm@10.13.1 && pnpm install
+# Copy package files
+COPY package.json pnpm-lock.yaml* ./
+COPY .npmrc* ./
 
-FROM node:22-alpine as builder
+# Install dependencies
+RUN corepack enable && pnpm install --frozen-lockfile && npm cache clean --force
 
-ENV NODE_ENV production
+# Stage 2: Builder
+FROM node:20-alpine AS builder
+WORKDIR /app
 
-WORKDIR /nextjs-starter-kit
+# Copy dependencies from deps stage
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-COPY --from=deps /nextjs-starter-kit/node_modules ./node_modules
 
+# Set build-time environment variables
+ARG NODE_ENV=production
+ARG SKIP_ENV_VALIDATION=true
+ARG NEXT_PUBLIC_API_BASE_URL
+
+ENV NODE_ENV=${NODE_ENV}
+ENV SKIP_ENV_VALIDATION=${SKIP_ENV_VALIDATION}
+ENV NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
+
+
+
+# Build the application
 RUN npm run build
-RUN npm run googlecloud:upload
 
-
+# Stage 3: Runner
 FROM node:22-alpine AS runner
+WORKDIR /app
 
-ARG NEXT_PUBLIC_ASSET_PREFIX
-ENV NEXT_PUBLIC_ASSET_PREFIX $NEXT_PUBLIC_ASSET_PREFIX
+# Create non-root user for security
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
-WORKDIR /nextjs-starter-kit
+# Set environment variables
+ENV NODE_ENV=production
+ENV PORT=4000
+ENV HOSTNAME="0.0.0.0"
 
-ENV NODE_ENV production
+# Copy built application
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
 
-# Don't run container as root, we should creating a new user with the least privileges.
-#RUN addgroup -g 1001 -S nodejs
-#RUN adduser -S nextjs -u 1001
+# Set correct permissions
+RUN chown -R nextjs:nodejs /app
+USER nextjs
 
-COPY --from=builder /nextjs-starter-kit/ ./
+# # Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node healthcheck.js
 
-RUN apk add --no-cache tzdata && \
-  cp -f /usr/share/zoneinfo/Asia/Ho_Chi_Minh /etc/localtime && \
-  echo "Asia/Ho_Chi_Minh" > /etc/timezone
+# Expose port
+EXPOSE 4000
 
-# Specify user
-#USER nextjs
-
-EXPOSE 8080
-
-CMD [ "npm", "run", "start" ]
+# Start the application
+CMD ["node", "server.js"]
