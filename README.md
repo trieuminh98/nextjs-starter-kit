@@ -32,8 +32,8 @@ Opinionated starter focused on clarity and DX. Includes nextjs best concept exam
 
 ### Prerequisites
 
-- Node.js 18+
-- pnpm (khuyến nghị)
+- Node.js 22+
+- pnpm (required)
 
 ### Install
 
