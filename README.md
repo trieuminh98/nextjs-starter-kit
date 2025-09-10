@@ -1,36 +1,114 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 Next.js Starter Kit (App Router)
 
-## Getting Started
+Opinionated starter focused on clarity and DX. Includes nextjs best concept examples, API routes, global state with Jotai, and React Query for server state.
 
-First, run the development server:
+## ✨ Features
+
+### 🏗️ Core
+
+- ⚡ Next.js 15 (App Router, Server Components)
+- 🔷 TypeScript (strict)
+- ⚛️ React 19
+
+### 🔌 Data & State
+
+- 🔁 TanStack Query v5 (server state, caching, devtools)
+- 🧪 Axios instance with env-based baseURL (`NEXT_PUBLIC_API_BASE_URL`)
+- 🧊 Jotai global state (Provider wired, hydration example)
+- 🧩 API Routes examples under `src/app/api`
+
+### 🛠️ Dev Experience
+
+- 🧭 React Query Devtools, Jotai DevTools
+- 🛰️ React Scan (dev-only performance overlay)
+- 🧹 ESLint + Prettier
+
+### 🐳 Ops
+
+- 🐳 Dockerfile (multi-stage ready)
+- 🏥 Health endpoints (`/api/health`)
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js 18+
+- pnpm (khuyến nghị)
+
+### Install
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+
+# Dev
 pnpm dev
-# or
-bun dev
+
+# Build / Start
+pnpm build && pnpm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📁 Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+  app/
+    api/                 # API routes (e.g. /api/configs, /api/auth/...)
+    hydrated-page/       # SSR fetch + hydrate Jotai example
+    components/          # Client components (UserInfo, etc.)
+    layout.tsx           # Root layout
+    page.tsx             # Landing page
+  components/core/       # Core UI helpers (ComponentWrapper, Image)
+  constants/             # Keys, common constants
+  lib/                   # http (axios, fetcher), cookies
+  providers/             # React Query, Auth, DevTools, Provider tree
+  services/              # API services (auth, user, configs)
+  state/                 # Jotai atoms (e.g., configsAtom)
+  types/                 # Shared types
+  utils/                 # Utilities
+```
 
-## Learn More
+## 🔧 Configuration
 
-To learn more about Next.js, take a look at the following resources:
+### Environment Variables
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Create `.env.local` and set at least:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `NEXT_PUBLIC_API_BASE_URL` (e.g. http://localhost:3000)
+- Optional ISR for configs demo: `NEXT_PUBLIC_CONFIGS_REVALIDATE=300`
 
-## Deploy on Vercel
+Axios instance reads `NEXT_PUBLIC_API_BASE_URL`. Server-side examples use Next.js `fetch` with ISR/no-store depending on the route.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🧭 Notable Examples
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- SSR + hydrate to Jotai: `src/app/hydrated-page/page.tsx` → fetch `/api/configs`, render SSR, hydrate into `configsAtom` for client.
+- API mocks: `src/app/api/configs/route.ts`, `src/app/api/auth/*`
+- Global providers: `src/providers/provider.tsx` (Jotai, React Query, DevTools)
+
+## 🧰 Dev Tools
+
+- React Query Devtools and Jotai DevTools are enabled in dev.
+- React Scan is wired in `src/providers/devTool.tsx` (toolbar, optional `trackUnnecessaryRenders`). See project README for options.
+
+## 🧪 Lint & Format
+
+```bash
+pnpm lint
+pnpm format
+```
+
+## 🐳 Docker
+
+```bash
+pnpm build
+docker build -t nextjs-starter-kit .
+```
+
+## 📄 License
+
+MIT
+
+---
+
+⭐ Star nếu template này hữu ích!

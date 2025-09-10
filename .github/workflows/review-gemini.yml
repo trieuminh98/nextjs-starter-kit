@@ -32,7 +32,7 @@ jobs:
         id: review
         with:
           gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
-          github_token: ${{ secrets.TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           github_repository: ${{ github.repository }}
           github_pull_request_number: ${{ github.event.pull_request.number }}
           git_commit_hash: ${{ github.event.pull_request.head.sha }}
@@ -41,5 +41,5 @@ jobs:
             ${{ steps.get_diff.outputs.pull_request_diff }}
           pull_request_chunk_size: '3500'
           extra_prompt: |-
-            Sempre responda em português brasileiro!
+            Always reply by english!
           log_level: 'DEBUG'

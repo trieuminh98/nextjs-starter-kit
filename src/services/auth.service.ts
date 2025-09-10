@@ -1,7 +1,7 @@
 'use server';
 
 import { fetcher } from '@/lib/http/fetcher';
-import { KEYS } from '@/types/key';
+import { KEYS } from '@/constants/key';
 import { cookies } from 'next/headers';
 
 type LoginResponse = {
