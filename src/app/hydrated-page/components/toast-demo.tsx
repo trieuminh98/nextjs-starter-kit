@@ -62,7 +62,7 @@ const ToastDemo = () => {
   };
 
   const handleDelete = () => {
-    deleteMutation.mutate(25);
+    deleteMutation.mutate();
   };
 
   const handleSilentCreate = () => {

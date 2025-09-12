@@ -3,10 +3,14 @@
 import { AxiosRequestConfig } from 'axios';
 import { http } from './axiosIntance';
 
+type CustomAxiosRequestConfig = AxiosRequestConfig & {
+  skipAttachToken?: boolean;
+};
+
 export const fetcher = async <T = unknown>(
   endpoint: string,
   method: 'get' | 'post' | 'put' | 'delete' | 'patch' = 'get',
-  options: AxiosRequestConfig = {}
+  options: CustomAxiosRequestConfig = {}
 ): Promise<T> => {
   const { signal, ...rest } = options;
   const controller = signal ? undefined : new AbortController();
@@ -23,15 +27,13 @@ export const fetcher = async <T = unknown>(
 };
 
 const measureAsync = async <T>(name: string, fn: () => Promise<T>): Promise<T> => {
-  performance.mark(`${name}-start`);
+  const t0 = performance.now();
+  console.log(fn);
   try {
     return await fn();
   } finally {
-    performance.mark(`${name}-end`);
-    performance.measure(name, `${name}-start`, `${name}-end`);
-    const [entry] = performance.getEntriesByName(name);
-    console.log(`⏱️ ${name}: ${entry.duration.toFixed(3)}ms`);
-    performance.clearMarks();
+    const t1 = performance.now();
+    console.log(`⏱️ ${name}: ${(t1 - t0).toFixed(3)}ms`);
   }
 };
 

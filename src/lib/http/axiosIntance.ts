@@ -2,23 +2,34 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { isClient } from '@/utils/common';
 import { getTokenClient } from '../cookies/token.client';
 import camelcaseKeys from 'camelcase-keys';
-import { getTokenServer } from '../cookies/token.server';
 import { KEYS } from '@/constants/key';
+
+declare module 'axios' {
+  export interface AxiosRequestConfig {
+    skipAttachToken?: boolean;
+  }
+}
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '';
 
 export const createAxiosInstance = (customConfig: AxiosRequestConfig = {}): AxiosInstance => {
   const instance = axios.create({
     baseURL: BASE_URL,
-    withCredentials: true,
+    withCredentials: false,
     ...customConfig,
   });
 
   // Request interceptor: attach token
   instance.interceptors.request.use(async (config) => {
-    const token = isClient()
-      ? getTokenClient(KEYS.JWT_TOKEN)
-      : await getTokenServer(KEYS.JWT_TOKEN);
+    if (config?.skipAttachToken) {
+      return config; // opt-out từ consumer
+    }
+    let token = null;
+    // Only support client-side token for personal data
+    // Incase for unauthorized data, we will use fetch nextjs (follow hydrate-page)
+    if (isClient()) {
+      token = getTokenClient(KEYS.JWT_TOKEN);
+    }
     if (token) {
       config.headers = config.headers || {};
       config.headers['Authorization'] = `Bearer ${token}`;

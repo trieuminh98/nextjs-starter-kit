@@ -1,9 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// To parse this data:
-//
-//   import { Convert, Welcome } from "./file";
-//
-//   const welcome = Convert.toWelcome(json);
 
 export type Pokemon = {
   abilities: Ability[];
