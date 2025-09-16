@@ -7,13 +7,18 @@ import ToastDemo from './components/toast-demo';
 import HandlingPart from './components/handlingPart';
 import HydratePart from './components/hydratePart';
 import ContainerWrapper from '@/components/core/componentWrapper';
+import StreamingPart from './components/streamingPart';
 
 export default async function Home() {
   const queryClient = getQueryClient();
 
+  // Global fetch without authen
   const pokemon = await fetchPokemon25();
   // Set pokemon data directly to cache to avoid duplicate fetch
   queryClient.setQueryData(pokemonQueries.detail(25).queryKey, pokemon);
+
+  // Streaming
+  queryClient.prefetchQuery(pokemonQueries.detail(26));
 
   // after(() => {
   //   // Execute after the layout is rendered and sent to the user
@@ -25,6 +30,10 @@ export default async function Home() {
       <HydratedPageHydrator initialPokemon={pokemon}>
         <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
           <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
+            {/* Streaming Part pokemon 26 */}
+            <ContainerWrapper enableErrorBoundary={true}>
+              <StreamingPart />
+            </ContainerWrapper>
             {/* SSR */}
             <div className="p-6 space-y-4">
               <section>
@@ -40,6 +49,8 @@ export default async function Home() {
 
             {/* Client Component */}
             <HydratePart />
+
+            {/* Client with hydrated atom and query pokemon 25 */}
             <ContainerWrapper enableErrorBoundary={true}>
               <HandlingPart />
             </ContainerWrapper>
