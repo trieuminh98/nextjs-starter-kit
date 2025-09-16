@@ -94,7 +94,7 @@ const ComponentWrapper = ({ children }: PropsWithChildren) => {
     <section
       style={{
         contentVisibility: 'auto',
-        containIntrinsicSize: '200px',
+        containIntrinsicSize: '500px',
       }}
     >
       {children}

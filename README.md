@@ -85,6 +85,7 @@ Axios instance reads `NEXT_PUBLIC_API_BASE_URL`. Server-side examples use Next.j
 - SSR + hydrate to Jotai: `src/app/hydrated-page/page.tsx` → fetch `/api/configs`, render SSR, hydrate into `configsAtom` for client.
 - API mocks: `src/app/api/configs/route.ts`, `src/app/api/auth/*`
 - Global providers: `src/providers/provider.tsx` (Jotai, React Query, DevTools)
+- ONLY USE server side fetch for global API (without auth), remaining will be fetch on client side
 
 ## 🧰 Dev Tools
 
