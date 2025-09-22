@@ -23,15 +23,17 @@ type CustomImageProps = {
  */
 export function Image({
   placeholderType = 'empty',
-  unoptimized = true,
+  unoptimized = false,
   sizes = DEFAULT_SIZES,
   quality = 75,
   loading = 'lazy',
+  decoding = 'async',
   width = 100,
   height = 100,
   fallbackImage = '/image-placeholder.png',
   src,
   onError,
+  style,
   ...rest
 }: CustomImageProps) {
   const [isErr, setErr] = useState(false);
@@ -49,6 +51,11 @@ export function Image({
   return (
     <NImage
       {...rest}
+      style={{
+        contentVisibility: 'auto',
+        containIntrinsicSize: `${height}px ${width}px`,
+        ...style,
+      }}
       src={isErr || !src ? fallbackImage : src}
       placeholder={placeholderType}
       unoptimized={unoptimized}
@@ -56,6 +63,7 @@ export function Image({
       width={width}
       height={height}
       quality={quality}
+      decoding={decoding}
       loading={loading}
       onError={handleError}
     />
