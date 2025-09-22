@@ -30,10 +30,11 @@
     "knip": "knip",
     "fta": "fta src",
     "clean": "node scripts/clean.ts",
-    "docker:build": "docker build -t nextjs-starter-kit .",
-    "docker:run": "docker run -p 4000:4000 nextjs-starter-kit",
-    "docker:dev": "docker build -t nextjs-starter-kit . && docker run -p 4000:4000 nextjs-starter-kit",
-    "docker": "bash scripts/docker.sh"
+    "docker:build": "docker compose build app",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f app",
+    "docker:rebuild": "docker compose build --no-cache app && docker compose up -d"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
