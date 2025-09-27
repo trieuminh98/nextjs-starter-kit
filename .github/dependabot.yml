@@ -19,3 +19,6 @@ updates:
     # Check for updates once a week
     schedule:
       interval: 'weekly'
+    commit-message:
+      # Prefix all commit messages with "[docker] "
+      prefix: '[docker] '
