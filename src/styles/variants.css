@@ -1,0 +1,30 @@
+/* ========================
+   Tailwind v4 Custom Variants
+   ======================== */
+
+/* JS / No-JS detection (progressive enhancement) */
+@custom-variant js (.js &);
+@custom-variant no-js (.no-js &);
+
+/* Breakpoints (range queries) */
+@custom-variant phone (@media (width <= 640px));
+@custom-variant tablet (@media (640px <= width < 1024px));
+@custom-variant desktop (@media (width >= 1024px));
+
+/* Input capabilities */
+@custom-variant touch (@media (hover: none) and (pointer: coarse));
+@custom-variant mouse (@media (hover: hover) and (pointer: fine));
+@custom-variant hybrid (@media (hover: none) and (pointer: coarse) and (any-pointer: fine));
+
+/* Orientation */
+@custom-variant portrait (@media (orientation: portrait));
+@custom-variant landscape (@media (orientation: landscape));
+
+/* Accessibility preferences */
+@custom-variant dark (@media (prefers-color-scheme: dark));
+@custom-variant light (@media (prefers-color-scheme: light));
+@custom-variant reduced-motion (@media (prefers-reduced-motion: reduce));
+@custom-variant high-contrast (@media (forced-colors: active));
+
+/* Resolution / Retina */
+@custom-variant retina (@media (resolution >= 2dppx));
