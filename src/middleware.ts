@@ -4,6 +4,9 @@ import type { NextRequest } from 'next/server';
 
 const publicPaths = ['/login'];
 
+// Only cache public paths
+const needCachePaths = ['/about'];
+
 const imageExtensions = ['.svg', '.jpg', '.jpeg', '.png', '.webp', '.gif', '.ico'];
 
 // Cache control function
@@ -16,7 +19,7 @@ function cacheControl(request: NextRequest): NextResponse | null {
     return response;
   }
   // Cache special pages
-  if (pathname === '/about' || pathname.startsWith('/blog/')) {
+  if (needCachePaths.includes(pathname)) {
     const response = NextResponse.next();
     response.headers.set('Cache-Control', 'public, max-age=600, stale-while-revalidate=60');
     return response;

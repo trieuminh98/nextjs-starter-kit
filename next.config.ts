@@ -20,23 +20,31 @@ const nextConfig: NextConfig = {
       {
         source: '/(.*)',
         headers: [
+          // Prevent embedding iframe
           {
             key: 'X-Frame-Options',
             value: 'DENY',
           },
+          // Prevent MIME type sniffing
           {
             key: 'X-Content-Type-Options',
             value: 'nosniff',
           },
+          // Prevent referrer policy
           {
             key: 'Referrer-Policy',
             value: 'strict-origin-when-cross-origin',
           },
+          // Prevent camera, microphone, geolocation
           {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=()',
           },
         ],
+      },
+      {
+        source: '/_next/static/:path*',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
       },
     ];
   },
