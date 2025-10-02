@@ -25,3 +25,88 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Base font size */
+
+@layer base {
+  html {
+    font-size: clamp(1em, 20px, 1.25em);
+  }
+}
+
+/* 1) Theme tokens for lh & vi scales */
+@theme {
+  /* line-height‑relative spacing */
+  --space-lh-0_25: 0.25lh;
+  --space-lh-0_5: 0.5lh;
+  --space-lh-0_75: 0.75lh;
+  --space-lh-1: 1lh;
+  --space-lh-1_25: 1.25lh;
+  --space-lh-1_5: 1.5lh;
+  --space-lh-2: 2lh;
+  --space-lh-3: 3lh;
+
+  /* inline‑axis (viewport inline) spacing */
+  --space-vi-0_5: 0.5vi;
+  --space-vi-1: 1vi;
+  --space-vi-2: 2vi;
+  --space-vi-3: 3vi;
+  --space-vi-5: 5vi;
+  --space-vi-10: 10vi;
+}
+
+/* 2) Functional utilities mapping tokens → properties */
+/* lh-based padding/margin/gap */
+@utility p-lh-* {
+  padding: --value(--space-lh-*);
+}
+@utility px-lh-* {
+  padding-inline: --value(--space-lh-*);
+}
+@utility py-lh-* {
+  padding-block: --value(--space-lh-*);
+}
+@utility pt-lh-* {
+  padding-top: --value(--space-lh-*);
+}
+@utility pr-lh-* {
+  padding-right: --value(--space-lh-*);
+}
+@utility pb-lh-* {
+  padding-bottom: --value(--space-lh-*);
+}
+@utility pl-lh-* {
+  padding-left: --value(--space-lh-*);
+}
+
+@utility m-lh-* {
+  margin: --value(--space-lh-*);
+}
+@utility mx-lh-* {
+  margin-inline: --value(--space-lh-*);
+}
+@utility my-lh-* {
+  margin-block: --value(--space-lh-*);
+}
+@utility mt-lh-* {
+  margin-top: --value(--space-lh-*);
+}
+@utility mr-lh-* {
+  margin-right: --value(--space-lh-*);
+}
+@utility mb-lh-* {
+  margin-bottom: --value(--space-lh-*);
+}
+@utility ml-lh-* {
+  margin-left: --value(--space-lh-*);
+}
+
+@utility gap-lh-* {
+  gap: --value(--space-lh-*);
+}
+@utility gap-x-lh-* {
+  column-gap: --value(--space-lh-*);
+}
+@utility gap-y-lh-* {
+  row-gap: --value(--space-lh-*);
+}
