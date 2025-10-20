@@ -1,9 +1,17 @@
 @import 'tailwindcss';
 @import '../styles/variants.css';
+@import '../styles/typography.css';
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+}
+
+/* reserve space for the scrollbar so it doesn’t cause shifts when it appears. */
+@supports (scrollbar-gutter: stable) {
+  :root {
+    scrollbar-gutter: stable both-edges;
+  } /* optional symmetry */
 }
 
 @theme inline {
@@ -21,7 +29,7 @@
 }
 
 /* ======================
-   Prelight
+   Preflight
    ====================== */
 
 *,
