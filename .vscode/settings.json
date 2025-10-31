@@ -1,0 +1,95 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.addMissingImports": "explicit",
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.stylelint": "explicit"
+  },
+  "editor.formatOnSave": true,
+  // don't show errors, but fix when save and git pre commit
+  "eslint.rules.customizations": [
+    { "rule": "import/order", "severity": "off" },
+    { "rule": "prettier/prettier", "severity": "off" },
+    { "rule": "react/jsx-sort-props", "severity": "off" },
+    { "rule": "sort-keys-fix/sort-keys-fix", "severity": "off" },
+    { "rule": "simple-import-sort/exports", "severity": "off" },
+    { "rule": "typescript-sort-keys/interface", "severity": "off" }
+  ],
+  // Indicate the file types to validate
+  "eslint.validate": [
+    "javascript", // .js
+    "javascriptreact", // .jsx
+    "typescript", // .ts
+    "typescriptreact", // .tsx
+    // support mdx
+    "mdx" // .mdx
+  ],
+  // Set the package manager to pnpm, automatically detect the package manager
+  "npm.packageManager": "pnpm",
+  // Ignore the node_modules folder and the locales folder
+  "search.exclude": {
+    "**/node_modules": true,
+    "locales": true
+  },
+  // Validate the CSS and PostCSS files
+  "stylelint.validate": [
+    "css",
+    "postcss",
+    // make stylelint work with tsx antd-style css template string
+    "typescriptreact"
+  ],
+  "workbench.editor.customLabels.patterns": {
+    // Next.js App Router entries
+    "**/src/app/**/[[]*[]]/[[]*[]]/page.tsx": "${dirname(2)}/${dirname(1)}/${dirname} • page",
+    "**/src/app/**/[[]*[]]/page.tsx": "${dirname(1)}/${dirname} • page",
+    "**/src/app/**/page.tsx": "${dirname} • page",
+    "**/src/app/**/[[]*[]]/[[]*[]]/layout.tsx": "${dirname(2)}/${dirname(1)}/${dirname} • layout",
+    "**/src/app/**/[[]*[]]/layout.tsx": "${dirname(1)}/${dirname} • layout",
+    "**/src/app/**/layout.tsx": "${dirname} • layout",
+    "**/src/app/**/[[]*[]]/[[]*[]]/default.tsx": "${dirname(2)}/${dirname(1)}/${dirname} • slot",
+    "**/src/app/**/[[]*[]]/default.tsx": "${dirname(1)}/${dirname} • slot",
+    "**/src/app/**/default.tsx": "${dirname} • slot",
+    "**/src/app/**/[[]*[]]/[[]*[]]/loading.tsx": "${dirname(2)}/${dirname(1)}/${dirname} • loading",
+    "**/src/app/**/[[]*[]]/loading.tsx": "${dirname(1)}/${dirname} • loading",
+    "**/src/app/**/loading.tsx": "${dirname} • loading",
+    "**/src/app/**/[[]*[]]/[[]*[]]/error.tsx": "${dirname(2)}/${dirname(1)}/${dirname} • error",
+    "**/src/app/**/[[]*[]]/error.tsx": "${dirname(1)}/${dirname} • error",
+    "**/src/app/**/error.tsx": "${dirname} • error",
+    "**/src/app/**/not-found.tsx": "${dirname} • not-found",
+    "**/src/app/**/template.tsx": "${dirname} • template",
+    "**/src/app/**/head.tsx": "${dirname} • head",
+    "**/src/app/api/**/route.ts": "${dirname(1)}/${dirname} • api route",
+    "**/src/app/**/route.ts": "${dirname} • route",
+
+    // Components & UI building blocks
+    "**/src/components/**/index.tsx": "${dirname} • component",
+    "**/src/components/**/*.tsx": "${dirname}/${filename} • component",
+    "**/src/providers/**/*.tsx": "${dirname}/${filename} • provider",
+
+    // Hooks & utils
+    "**/src/hooks/**/*.ts": "${dirname}/${filename} • hook",
+    "**/src/utils/**/*.ts": "${dirname}/${filename} • util",
+    "**/src/lib/**/index.ts": "${dirname} • lib",
+    "**/src/lib/**/*.ts": "${dirname}/${filename} • lib",
+    "**/src/helper/**/*.ts": "${dirname}/${filename} • helper",
+
+    // State & constants
+    "**/src/state/**/index.ts": "${dirname} • state",
+    "**/src/state/**/*.ts": "${dirname}/${filename} • state",
+    "**/src/constants/**/*.ts": "${filename} • constant",
+    "**/src/types/**/*.ts": "${filename} • type",
+
+    // Services & HTTP
+    "**/src/services/**/index.ts": "${dirname} • service",
+    "**/src/services/**/*.ts": "${dirname}/${filename} • service",
+    "**/src/lib/http/**/*.ts": "${dirname}/${filename} • http",
+
+    // Styles & themes
+    "**/src/styles/**/*.ts": "${dirname}/${filename} • style",
+
+    // Root config files
+    "**/config/**/*.ts": "${dirname}/${filename} • config",
+
+    // Fallback for index-type files
+    "**/index.*": "${dirname}/${filename}.${extname}"
+  }
+}
