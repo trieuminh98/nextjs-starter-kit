@@ -56,7 +56,8 @@
     "react-dom": "19.1.1",
     "react-error-boundary": "^6.0.0",
     "react-scan": "^0.4.3",
-    "sonner": "^2.0.7"
+    "sonner": "^2.0.7",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",

@@ -1,17 +1,15 @@
-import { fetcher } from '@/lib/http/fetcher';
+import { fetcherWithValidation } from '@/lib/http/fetcher';
+import { z } from 'zod';
 
-type UserInfo = {
-  id: number;
-  email: string;
-  name: string;
-  role: string;
-};
+const UserInfoSchema = z.object({
+  id: z.number(),
+  email: z.string(),
+  name: z.string(),
+  role: z.string(),
+});
+
+export type UserInfo = z.infer<typeof UserInfoSchema>;
 
 export const getUserInfo = async () => {
-  try {
-    const data = await fetcher<UserInfo>('api/auth/userinfo', 'get');
-    return data;
-  } catch (error: unknown) {
-    throw error;
-  }
+  return fetcherWithValidation<unknown, UserInfo>('api/auth/userinfo', UserInfoSchema, 'get');
 };
