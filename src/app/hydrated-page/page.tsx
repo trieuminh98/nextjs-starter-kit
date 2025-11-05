@@ -6,8 +6,8 @@ import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import ToastDemo from './components/toast-demo';
 import HandlingPart from './components/handlingPart';
 import HydratePart from './components/hydratePart';
-import ContainerWrapper from '@/components/core/componentWrapper';
 import StreamingPart from './components/streamingPart';
+import { CompositeWrapper } from '@/components/core/compositeWrapper';
 
 export default async function Home() {
   const queryClient = getQueryClient();
@@ -31,9 +31,9 @@ export default async function Home() {
         <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
           <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
             {/* Streaming Part pokemon 26 */}
-            <ContainerWrapper enableErrorBoundary={true}>
+            <CompositeWrapper>
               <StreamingPart />
-            </ContainerWrapper>
+            </CompositeWrapper>
             {/* SSR */}
             <div className="p-6 space-y-4">
               <section>
@@ -51,9 +51,9 @@ export default async function Home() {
             <HydratePart />
 
             {/* Client with hydrated atom and query pokemon 25 */}
-            <ContainerWrapper enableErrorBoundary={true}>
+            <CompositeWrapper>
               <HandlingPart />
-            </ContainerWrapper>
+            </CompositeWrapper>
           </main>
           {/* Static */}
           <Footer />

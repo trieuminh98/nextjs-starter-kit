@@ -1,18 +1,12 @@
 'use client';
 import React, { PropsWithChildren, Suspense } from 'react';
-import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
+import { ErrorBoundary as ReactErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { useQueryClient } from '@tanstack/react-query';
 
-interface ErrorFallbackProps {
+type ErrorFallbackProps = {
   error: Error;
   resetErrorBoundary: () => void;
-}
-
-interface ComponentWrapperProps extends PropsWithChildren {
-  enableErrorBoundary?: boolean;
-  errorFallback?: React.ComponentType<FallbackProps>;
-  enableSuspense?: boolean;
-}
+};
 
 const ErrorFallback = ({ error: _error, resetErrorBoundary }: ErrorFallbackProps) => {
   const queryClient = useQueryClient();
@@ -89,63 +83,77 @@ const ErrorFallback = ({ error: _error, resetErrorBoundary }: ErrorFallbackProps
   );
 };
 
-const ComponentWrapper = ({ children }: PropsWithChildren) => {
+const baseWrapperStyle: React.CSSProperties = {
+  contentVisibility: 'auto',
+  containIntrinsicSize: '500px',
+};
+
+type ComponentWrapperProps = PropsWithChildren<{
+  className?: string;
+}>;
+
+export const ComponentWrapper = ({ children, className }: ComponentWrapperProps) => (
+  <section className={`${className ?? ''}`} style={baseWrapperStyle}>
+    <div className="min-w-0">{children}</div>
+  </section>
+);
+
+const DefaultLoadingFallback = () => {
+  return <div>Loading...</div>;
+};
+
+type SuspenseBoundaryProps = PropsWithChildren<{
+  fallback?: React.ReactNode;
+}>;
+
+export const SuspenseBoundary = ({
+  children,
+  fallback = <DefaultLoadingFallback />,
+}: SuspenseBoundaryProps) => {
+  return <Suspense fallback={fallback}>{children}</Suspense>;
+};
+
+const defaultErrorFallback = ErrorFallback;
+
+type ComponentErrorBoundaryProps = PropsWithChildren<{
+  fallbackComponent?: React.ComponentType<FallbackProps>;
+}>;
+
+export const ErrorBoundary = ({
+  children,
+  fallbackComponent = defaultErrorFallback,
+}: ComponentErrorBoundaryProps) => {
   return (
-    <section
-      style={{
-        contentVisibility: 'auto',
-        containIntrinsicSize: '500px',
+    <ReactErrorBoundary
+      FallbackComponent={fallbackComponent}
+      onError={(error, errorInfo) => {
+        console.error('Error caught by boundary:', error, errorInfo);
       }}
     >
       {children}
-    </section>
+    </ReactErrorBoundary>
   );
 };
 
-const SuspenseWrapper = ({
-  children,
-  enableSuspense,
-}: PropsWithChildren<Pick<ComponentWrapperProps, 'enableSuspense'>>) => {
-  if (enableSuspense) {
-    return <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>;
-  }
-  return children;
-};
+type CompositeWrapperProps = PropsWithChildren<
+  Pick<ComponentErrorBoundaryProps, 'fallbackComponent'> &
+    Pick<SuspenseBoundaryProps, 'fallback'> &
+    Pick<ComponentWrapperProps, 'className'>
+>;
 
-const ErrorBoundaryWrapper = ({
+export const CompositeWrapper = ({
   children,
-  enableErrorBoundary,
-  errorFallback,
-}: PropsWithChildren<Pick<ComponentWrapperProps, 'enableErrorBoundary' | 'errorFallback'>>) => {
-  if (enableErrorBoundary) {
-    return (
-      <ErrorBoundary
-        FallbackComponent={errorFallback || ErrorFallback}
-        onError={(error, errorInfo) => {
-          // Log error to console or external service
-          console.error('Error caught by boundary:', error, errorInfo);
-        }}
-      >
-        {children}
-      </ErrorBoundary>
-    );
-  }
-  return children;
-};
-
-const ContainerWrapper = ({
-  children,
-  enableErrorBoundary = true,
-  errorFallback,
-  enableSuspense = true,
-}: ComponentWrapperProps) => {
+  fallbackComponent,
+  fallback,
+  className,
+}: CompositeWrapperProps) => {
   return (
-    <ErrorBoundaryWrapper enableErrorBoundary={enableErrorBoundary} errorFallback={errorFallback}>
-      <SuspenseWrapper enableSuspense={enableSuspense}>
-        <ComponentWrapper>{children}</ComponentWrapper>
-      </SuspenseWrapper>
-    </ErrorBoundaryWrapper>
+    <ComponentWrapper className={className}>
+      <ErrorBoundary fallbackComponent={fallbackComponent}>
+        <SuspenseBoundary fallback={fallback}>{children}</SuspenseBoundary>
+      </ErrorBoundary>
+    </ComponentWrapper>
   );
 };
 
-export default ContainerWrapper;
+export default CompositeWrapper;
