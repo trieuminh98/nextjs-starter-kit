@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import { PropsWithChildren, ViewTransition } from 'react';
 import ReactQueryProvider from './queryClient';
 import AuthProvider from './auth';
 import DevToolProvider from './devTool';
@@ -12,8 +12,10 @@ const Provider = ({ children }: PropsWithChildren) => {
       <JotaiProvider>
         <DevToolProvider>
           <AuthProvider>
-            <ProgressBar>{children}</ProgressBar>
-            <ToastProvider />
+            <ViewTransition>
+              <ProgressBar>{children}</ProgressBar>
+              <ToastProvider />
+            </ViewTransition>
           </AuthProvider>
         </DevToolProvider>
       </JotaiProvider>
