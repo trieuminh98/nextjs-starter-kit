@@ -3,10 +3,13 @@ import { redirect } from 'next/navigation';
 // Check if running on client
 export const isClient = () => typeof window !== 'undefined';
 
-export const isomorphicRedirect = (url: string) => {
+type RedirectTarget = Parameters<typeof redirect>[0];
+
+export const isomorphicRedirect = (url: RedirectTarget | string) => {
+  const href = typeof url === 'string' ? url : `${url}`;
   if (isClient()) {
-    window.location.href = url;
+    window.location.href = href;
   } else {
-    redirect(url);
+    redirect(url as RedirectTarget);
   }
 };

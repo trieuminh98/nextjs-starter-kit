@@ -5,8 +5,10 @@ const IMAGE_QUALITIES: ImageQuality[] = [25, 50, 75, 100];
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  reactCompiler: true,
   experimental: {
     browserDebugInfoInTerminal: true,
+    turbopackFileSystemCacheForDev: true,
   },
   typedRoutes: true,
   images: {
