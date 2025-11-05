@@ -27,7 +27,7 @@ function cacheControl(request: NextRequest): NextResponse | null {
   return null;
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const jwtToken = request.cookies.get(KEYS.JWT_TOKEN)?.value;
   if (publicPaths.includes(request.nextUrl.pathname)) {
     if (jwtToken) {

@@ -6,11 +6,18 @@ interface ExpensiveProps {
   isSSR: boolean;
 }
 
+const simulateBlockingWork = () => {
+  let total = 0;
+  const iterations = 7_500_000;
+  for (let i = 0; i < iterations; i += 1) {
+    total += (i % 10) * (i % 3);
+  }
+  return total;
+};
+
 export const Expensive = ({ isSSR }: ExpensiveProps) => {
-  // Hog main thread for 100 milliseconds
-  const start = Date.now();
-  while (Date.now() - start < 100) {}
-  console.log('Render Expensive', isSSR);
+  const syntheticLoad = simulateBlockingWork();
+  console.log('Render Expensive', isSSR, syntheticLoad);
   return <div className="text-xs text-gray-500">Expensive Component (SSR: {isSSR.toString()})</div>;
 };
 
