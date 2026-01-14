@@ -16,13 +16,11 @@ export const fetcher = async <T = unknown>(
   const { signal, ...rest } = options;
   const controller = signal ? undefined : new AbortController();
   const finalSignal = signal || controller?.signal;
-  const response = await measureAsync(endpoint, () => {
-    return http.request<T>({
-      url: endpoint,
-      method,
-      signal: finalSignal,
-      ...rest,
-    });
+  const response = await http.request<T>({
+    url: endpoint,
+    method,
+    signal: finalSignal,
+    ...rest,
   });
   return response.data;
 };
@@ -44,25 +42,4 @@ export const fetcherWithValidation = async <T, Z>(
     }
     throw error;
   }
-};
-
-const measureAsync = async <T>(name: string, fn: () => Promise<T>): Promise<T> => {
-  const t0 = performance.now();
-  console.log(fn);
-  try {
-    return await fn();
-  } finally {
-    const t1 = performance.now();
-    console.log(`⏱️ ${name}: ${(t1 - t0).toFixed(3)}ms`);
-  }
-};
-
-export const racePromise = async <T>(
-  promise: Promise<T>,
-  timeoutMs: number = 1000
-): Promise<T | undefined> => {
-  return Promise.any([
-    promise,
-    new Promise<undefined>((resolve) => setTimeout(resolve, timeoutMs)),
-  ]);
 };

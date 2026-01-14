@@ -59,5 +59,3 @@ export const createAxiosInstance = (customConfig: AxiosRequestConfig = {}): Axio
 };
 
 export const http = createAxiosInstance();
-
-export const createAbortController = () => new AbortController();

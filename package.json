@@ -27,8 +27,6 @@
     "format": "prettier . --write --experimental-cli",
     "type-check": "tsc --noEmit",
     "next-gen-type": "next typegen && npm run type-check",
-    "knip": "knip",
-    "fta": "fta src",
     "clean": "node scripts/clean.ts",
     "docker:build": "docker compose build app",
     "docker:up": "docker compose up -d",
@@ -58,7 +56,6 @@
     "react-dom": "19.2.0",
     "react-error-boundary": "^6.0.0",
     "react-scan": "^0.4.3",
-    "sonner": "^2.0.7",
     "zod": "^4.1.12"
   },
   "devDependencies": {
@@ -73,9 +70,7 @@
     "@types/react-dom": "19.2.2",
     "eslint": "^9",
     "eslint-config-next": "16.0.1",
-    "fta-cli": "^3.0.0",
     "husky": "^9.1.7",
-    "knip": "^5.63.0",
     "lint-staged": "^16.1.2",
     "prettier": "^3.6.2",
     "svgo": "^4.0.0",
