@@ -10,9 +10,6 @@ export default async function Home() {
       <Link prefetch href={'/experiment/custom-variant'}>
         Custom Variant
       </Link>
-      <Link prefetch href={'/experiment/hydration-with-uses'}>
-        Hydration with useSyncExternalStore
-      </Link>
     </div>
   );
 }

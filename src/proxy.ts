@@ -5,27 +5,6 @@ import type { NextRequest } from 'next/server';
 const publicPaths = ['/login'];
 
 // Only cache public paths
-const needCachePaths = ['/about'];
-
-const imageExtensions = ['.svg', '.jpg', '.jpeg', '.png', '.webp', '.gif', '.ico'];
-
-// Cache control function
-function cacheControl(request: NextRequest): NextResponse | null {
-  const { pathname } = request.nextUrl;
-  // Cache static asset
-  if (imageExtensions.some((ext) => pathname.endsWith(ext))) {
-    const response = NextResponse.next();
-    response.headers.set('Cache-Control', 'public, max-age=600, stale-while-revalidate=60');
-    return response;
-  }
-  // Cache special pages
-  if (needCachePaths.includes(pathname)) {
-    const response = NextResponse.next();
-    response.headers.set('Cache-Control', 'public, max-age=600, stale-while-revalidate=60');
-    return response;
-  }
-  return null;
-}
 
 export async function proxy(request: NextRequest) {
   const jwtToken = request.cookies.get(KEYS.JWT_TOKEN)?.value;
@@ -44,10 +23,6 @@ export async function proxy(request: NextRequest) {
     loginUrl.searchParams.set('from', request.nextUrl.pathname);
     return NextResponse.redirect(loginUrl);
   }
-
-  // Cache control Test
-  const cache = cacheControl(request);
-  if (cache) return cache;
 
   return NextResponse.next();
 }

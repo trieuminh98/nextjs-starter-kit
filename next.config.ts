@@ -6,6 +6,7 @@ const IMAGE_QUALITIES: ImageQuality[] = [25, 50, 75, 100];
 const nextConfig: NextConfig = {
   output: 'standalone',
   reactCompiler: true,
+  cacheComponents: true,
   experimental: {
     browserDebugInfoInTerminal: true,
     turbopackFileSystemCacheForDev: true,
@@ -13,6 +14,12 @@ const nextConfig: NextConfig = {
   typedRoutes: true,
   images: {
     qualities: IMAGE_QUALITIES, // Explicitly allow quality={25, 50, 75, 100}
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'raw.githubusercontent.com',
+      },
+    ],
   },
   transpilePackages: ['jotai-devtools'],
   // Security headers
