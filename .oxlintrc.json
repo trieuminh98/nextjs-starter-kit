@@ -2,7 +2,9 @@
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "plugins": [],
   "categories": {
-    "correctness": "off"
+    "correctness": "error",
+    "suspicious": "error",
+    "perf": "warn"
   },
   "env": {
     "builtin": true

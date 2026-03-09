@@ -38,7 +38,7 @@ export const fetcherWithValidation = async <T, Z>(
   } catch (error: unknown) {
     if (error instanceof z.ZodError) {
       console.error('Validation error:', error.issues);
-      throw new Error('Invalid data format');
+      throw new Error('Invalid data format', { cause: error });
     }
     throw error;
   }

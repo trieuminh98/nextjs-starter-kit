@@ -1,6 +1,5 @@
 // Since QueryClientProvider relies on useContext under the hood, we have to put 'use client' on top
 import { isServer, MutationCache, QueryClient } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 
 function makeQueryClient() {
   const queryClient = new QueryClient({
@@ -11,7 +10,7 @@ function makeQueryClient() {
       },
     },
     mutationCache: new MutationCache({
-      onError: (_error, _variables, _context, mutation) => {
+      onError: (_error, _variables, _context, _mutation) => {
         console.error('Mutation error:', _error);
       },
       onSettled: (_data, _error, _variables, _context, mutation) => {
