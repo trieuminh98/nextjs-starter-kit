@@ -21,6 +21,7 @@ const Link = ({
 
   if (external) {
     return (
+      // oxlint-disable-next-line nextjs/no-html-link-for-pages
       <a
         ref={ref}
         href={href}

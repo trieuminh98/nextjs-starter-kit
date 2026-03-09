@@ -1,20 +1,35 @@
 'use client';
+import dynamic from 'next/dynamic';
 import { PropsWithChildren } from 'react';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { DevTools as JotaiDevTools } from 'jotai-devtools';
-import 'jotai-devtools/styles.css';
-import { useScan } from 'react-scan';
+
+const ReactQueryDevtools = dynamic(
+  () => import('@tanstack/react-query-devtools').then((mod) => mod.ReactQueryDevtools),
+  {
+    ssr: false,
+  }
+);
+
+const JotaiDevTool = dynamic(() => import('./jotaiDevTool').then((mod) => mod.JotaiDevTool), {
+  ssr: false,
+});
+
+const ReactScanDevTool = dynamic(
+  () => import('./reactScanDevTool').then((mod) => mod.ReactScanDevTool),
+  {
+    ssr: false,
+  }
+);
 
 const DevToolProvider = ({ children }: PropsWithChildren) => {
-  useScan({
-    enabled: process.env.NODE_ENV === 'development',
-    showToolbar: true,
-    trackUnnecessaryRenders: true,
-  });
+  if (process.env.NODE_ENV !== 'development') {
+    return <>{children}</>;
+  }
+
   return (
     <>
       {children}
-      {process.env.NODE_ENV !== 'production' ? <JotaiDevTools isInitialOpen={false} /> : null}
+      <ReactScanDevTool />
+      <JotaiDevTool />
       <ReactQueryDevtools initialIsOpen={false} />
     </>
   );
