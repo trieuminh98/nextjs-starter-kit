@@ -7,18 +7,10 @@
   "env": {
     "builtin": true
   },
-  "ignorePatterns": [
-    "node_modules/**",
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts"
-  ],
+  "ignorePatterns": ["node_modules/**", ".next/**", "out/**", "build/**", "next-env.d.ts"],
   "overrides": [
     {
-      "files": [
-        "**/*.{js,jsx,mjs,ts,tsx,mts,cts}"
-      ],
+      "files": ["**/*.{js,jsx,mjs,ts,tsx,mts,cts}"],
       "rules": {
         "react/jsx-key": "error",
         "react/jsx-no-comment-textnodes": "error",
@@ -63,12 +55,8 @@
         "jsx-a11y/alt-text": [
           "warn",
           {
-            "elements": [
-              "img"
-            ],
-            "img": [
-              "Image"
-            ]
+            "elements": ["img"],
+            "img": ["Image"]
           }
         ],
         "jsx-a11y/aria-props": "warn",
@@ -77,12 +65,7 @@
         "jsx-a11y/role-has-required-aria-props": "warn",
         "jsx-a11y/role-supports-aria-props": "warn"
       },
-      "plugins": [
-        "react",
-        "nextjs",
-        "import",
-        "jsx-a11y"
-      ],
+      "plugins": ["react", "nextjs", "import", "jsx-a11y"],
       "env": {
         "browser": true,
         "node": true

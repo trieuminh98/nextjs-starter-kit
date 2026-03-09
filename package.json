@@ -25,7 +25,8 @@
     "prepare": "husky",
     "commitlint": "commitlint --edit",
     "svgo": "svgo -rf ./public -o ./public",
-    "format": "prettier . --write --experimental-cli",
+    "format": "oxfmt . --write",
+    "format:check": "oxfmt . --check",
     "type-check": "tsc --noEmit",
     "next-gen-type": "next typegen && npm run type-check",
     "clean": "node scripts/clean.ts",
@@ -37,6 +38,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
+      "oxfmt --write",
       "oxlint --fix"
     ]
   },
@@ -69,8 +71,8 @@
     "@types/react-dom": "19.2.2",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.2",
+    "oxfmt": "^0.36.0",
     "oxlint": "^1.39.0",
-    "prettier": "^3.6.2",
     "svgo": "^4.0.0",
     "tailwindcss": "^4",
     "typescript": "^5"

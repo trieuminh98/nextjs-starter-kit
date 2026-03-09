@@ -6,4 +6,3 @@ import 'jotai-devtools/styles.css';
 export const JotaiDevTool = () => {
   return <JotaiDevTools isInitialOpen={false} />;
 };
-

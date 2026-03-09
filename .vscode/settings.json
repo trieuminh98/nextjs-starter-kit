@@ -1,28 +1,22 @@
 {
   "editor.codeActionsOnSave": {
     "source.addMissingImports": "explicit",
-    "source.fixAll.eslint": "explicit",
     "source.fixAll.stylelint": "explicit"
   },
   "editor.formatOnSave": true,
-  // don't show errors, but fix when save and git pre commit
-  "eslint.rules.customizations": [
-    { "rule": "import/order", "severity": "off" },
-    { "rule": "prettier/prettier", "severity": "off" },
-    { "rule": "react/jsx-sort-props", "severity": "off" },
-    { "rule": "sort-keys-fix/sort-keys-fix", "severity": "off" },
-    { "rule": "simple-import-sort/exports", "severity": "off" },
-    { "rule": "typescript-sort-keys/interface", "severity": "off" }
-  ],
-  // Indicate the file types to validate
-  "eslint.validate": [
-    "javascript", // .js
-    "javascriptreact", // .jsx
-    "typescript", // .ts
-    "typescriptreact", // .tsx
-    // support mdx
-    "mdx" // .mdx
-  ],
+  "oxc.path.node": "/usr/local/bin/node",
+  "[javascript]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
   // Set the package manager to pnpm, automatically detect the package manager
   "npm.packageManager": "pnpm",
   // Ignore the node_modules folder and the locales folder
