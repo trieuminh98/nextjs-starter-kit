@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { createPokemon, updatePokemon, deletePokemon } from '@/services/pokemon.service';
 import { Pokemon } from '@/types/pokemon';
+import { pokemonKeys } from '@/queries/pokemon.query';
 
 const ToastDemo = () => {
   const [pokemonName, setPokemonName] = useState('Pikachu');
@@ -12,7 +13,7 @@ const ToastDemo = () => {
   const createMutation = useMutation({
     mutationFn: createPokemon,
     meta: {
-      invalidatesQuery: ['pokemon'], // Use the base query key
+      invalidatesQuery: pokemonKeys.all,
       successMessage: 'Pokemon created successfully! 🎉',
       successTitle: 'A new Pokemon has been added to your collection',
       errorMessage: 'Failed to create Pokemon 😢',
@@ -24,7 +25,7 @@ const ToastDemo = () => {
   const updateMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: Partial<Pokemon> }) => updatePokemon(id, data),
     meta: {
-      invalidatesQuery: ['pokemon'], // Use the base query key
+      invalidatesQuery: pokemonKeys.all,
       successMessage: 'Pokemon updated successfully! ✨',
       successTitle: 'Your Pokemon has been modified',
       errorMessage: 'Failed to update Pokemon 😢',
@@ -36,7 +37,7 @@ const ToastDemo = () => {
   const deleteMutation = useMutation({
     mutationFn: deletePokemon,
     meta: {
-      invalidatesQuery: ['pokemon'], // Use the base query key
+      invalidatesQuery: pokemonKeys.all,
       successMessage: 'Pokemon deleted successfully! 🗑️',
       successTitle: 'The Pokemon has been removed from your collection',
       errorMessage: 'Failed to delete Pokemon 😢',
@@ -49,7 +50,7 @@ const ToastDemo = () => {
     mutationFn: createPokemon,
     meta: {
       skipToast: true,
-      invalidatesQuery: ['pokemon'], // Use the base query key
+      invalidatesQuery: pokemonKeys.all,
     },
   });
 

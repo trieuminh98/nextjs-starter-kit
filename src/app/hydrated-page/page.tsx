@@ -1,11 +1,11 @@
 import Footer from './components/footer';
 import HydratedPageHydrator from './hydrator';
-import { fetchPokemon25 } from './query';
 import ToastDemo from './components/toast-demo';
 import HandlingPart from './components/handlingPart';
 import HydratePart from './components/hydratePart';
 import StreamingPart from './components/streamingPart';
 import { CompositeWrapper } from '@/components/core/compositeWrapper';
+import { fetchPokemon25 } from '@/queries/pokemon.server';
 
 export default async function Home() {
   // Global fetch without authen

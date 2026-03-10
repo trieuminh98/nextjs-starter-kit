@@ -3,19 +3,18 @@ import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import React from 'react';
 import { useAtomValue } from 'jotai';
 import { pokemonAtom } from '@/state/pokemon';
-import { pokemonQueries, userQueries } from '../query';
+import { pokemonQueries } from '@/queries/pokemon.query';
+import { userQueries } from '@/queries/user.query';
 
 const HydratePart = () => {
-  const { data } = useQuery({
-    ...userQueries.info,
-  });
+  const { data } = useQuery(userQueries.info);
 
   const pokemonAtomData = useAtomValue(pokemonAtom);
 
-  // Use the new createQueryKeys pattern
+  // Reuse shared queryOptions and override only component-specific options.
   const { data: pokemonData } = useSuspenseQuery({
     ...pokemonQueries.detail(25),
-    initialData: pokemonAtomData,
+    initialData: pokemonAtomData ?? undefined,
   });
 
   return (

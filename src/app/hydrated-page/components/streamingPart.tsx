@@ -1,13 +1,10 @@
 'use client';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import React from 'react';
-import { pokemonQueries } from '../query';
+import { pokemonQueries } from '@/queries/pokemon.query';
 
 const StreamingPark = () => {
-  // Use the new createQueryKeys pattern
-  const { data: pokemonData } = useSuspenseQuery({
-    ...pokemonQueries.detail(26),
-  });
+  const { data: pokemonData } = useSuspenseQuery(pokemonQueries.detail(26));
 
   return (
     <div className="flex flex-col gap-3">
