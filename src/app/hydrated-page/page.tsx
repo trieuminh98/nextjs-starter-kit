@@ -6,14 +6,19 @@ import StreamingPart from './components/streamingPart';
 import { CompositeWrapper } from '@/components/core/compositeWrapper';
 import { getQueryClient } from '@/helper/query-client';
 import { pokemonQueries } from '@/queries/pokemon.query';
+import { cacheLife } from 'next/cache';
 
 export default async function Home() {
+  'use cache';
+  cacheLife({ stale: 30 });
   // Global fetch without authen
   const queryClient = getQueryClient();
 
   const pokemon = await queryClient.fetchQuery(
     pokemonQueries.detail(25, { next: { revalidate: 300 } })
   );
+
+  console.log('prerender');
 
   await queryClient.prefetchQuery(pokemonQueries.detail(28, { next: { revalidate: 300 } }));
 
