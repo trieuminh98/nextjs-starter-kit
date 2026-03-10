@@ -9,17 +9,19 @@ type LoginResponse = {
 };
 
 export const login = async (email: string, password: string) => {
-  const res = await fetcher<LoginResponse>('api/auth/signin', 'post', {
+  const res = await fetcher<LoginResponse>('api/auth/signin', {
+    auth: 'none',
+    method: 'post',
     data: { email, password },
   });
-  if (res) {
+  if (res.data) {
     const cookieStore = await cookies();
     cookieStore.set({
       name: KEYS.JWT_TOKEN,
-      value: res.accessToken,
+      value: res.data.accessToken,
       sameSite: 'lax',
       path: '/',
     });
   }
-  return res;
+  return res.data;
 };

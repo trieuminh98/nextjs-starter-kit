@@ -1,5 +1,6 @@
 import { queryOptions } from '@tanstack/react-query';
 import { getPokemonDetail } from '@/services/pokemon.service';
+import { FetcherCustomOptions } from '@/lib/http/fetcher';
 
 export const pokemonKeys = {
   all: ['pokemon'] as const,
@@ -21,11 +22,9 @@ export const pokemonQueries = {
         return await res.json();
       },
     }),
-  detail: (id: string | number) =>
+  detail: (id: string | number, fetcherOptions?: FetcherCustomOptions) =>
     queryOptions({
       queryKey: pokemonKeys.detail(id),
-      queryFn: async () => {
-        return await getPokemonDetail(id);
-      },
+      queryFn: async () => getPokemonDetail(id, fetcherOptions),
     }),
 };

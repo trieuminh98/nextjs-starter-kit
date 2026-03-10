@@ -1,20 +1,21 @@
 import Footer from './components/footer';
 import HydratedPageHydrator from './hydrator';
-import ToastDemo from './components/toast-demo';
 import HandlingPart from './components/handlingPart';
 import HydratePart from './components/hydratePart';
 import StreamingPart from './components/streamingPart';
 import { CompositeWrapper } from '@/components/core/compositeWrapper';
-import { fetchPokemon25 } from '@/queries/pokemon.server';
+import { getQueryClient } from '@/helper/query-client';
+import { pokemonQueries } from '@/queries/pokemon.query';
 
 export default async function Home() {
   // Global fetch without authen
-  const pokemon = await fetchPokemon25();
+  const queryClient = getQueryClient();
 
-  // after(() => {
-  //   // Execute after the layout is rendered and sent to the user
-  //   console.log('do something after send the response to client');
-  // });
+  const pokemon = await queryClient.fetchQuery(
+    pokemonQueries.detail(25, { next: { revalidate: 300 } })
+  );
+
+  await queryClient.prefetchQuery(pokemonQueries.detail(28, { next: { revalidate: 300 } }));
 
   return (
     <HydratedPageHydrator initialPokemon={pokemon}>
@@ -29,13 +30,12 @@ export default async function Home() {
             <section>
               <h2 className="font-medium mb-1">Data from SSR fetching (SSR)</h2>
               <pre className="text-xs bg-black/5 dark:bg-white/10 rounded p-3">
-                {JSON.stringify(pokemon.abilities, null, 2)}
+                {JSON.stringify(pokemon?.name, null, 2)}
               </pre>
             </section>
           </div>
 
           {/* Global Toast Demo */}
-          <ToastDemo />
 
           {/* Client Component */}
           <CompositeWrapper>

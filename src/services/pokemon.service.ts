@@ -1,5 +1,7 @@
-import { fetcher } from '@/lib/http/fetcher';
+import { FetcherCustomOptions, fetcher } from '@/lib/http/fetcher';
 import { Pokemon } from '@/types/pokemon';
+
+type PokemonDetailOptions = Pick<FetcherCustomOptions, 'next' | 'signal' | 'timeoutMs'>;
 
 // Mock API functions
 export const createPokemon = async (pokemonData: Partial<Pokemon>): Promise<Pokemon> => {
@@ -51,10 +53,17 @@ export const deletePokemon = async (): Promise<void> => {
   }
 };
 
-export const getPokemonDetail = async (id: string | number) => {
-  const res = await fetcher<Pokemon>(`/pokemon/${id}`, 'get', {
+export const getPokemonDetail = async (id: string | number, options: PokemonDetailOptions = {}) => {
+  const res = await fetcher<Pokemon>(`/pokemon/${id}`, {
+    auth: 'none',
+    method: 'get',
     baseURL: 'https://pokeapi.co/api/v2',
-    skipAttachToken: true,
+    next: options.next,
+    signal: options.signal,
+    timeoutMs: options.timeoutMs,
   });
-  return res;
+  if (!res.data) {
+    throw new Error('Pokemon detail response is empty');
+  }
+  return res.data;
 };

@@ -21,8 +21,13 @@ export default function LoginForm() {
         if (data) {
           router.push('/');
         }
-      } catch (error) {
-        setError(JSON.parse((error as Error).message).message);
+      } catch (caughtError) {
+        const message = caughtError instanceof Error ? caughtError.message : 'Login failed';
+        try {
+          setError(JSON.parse(message).message);
+        } catch {
+          setError(message);
+        }
       }
     });
   };

@@ -11,7 +11,7 @@ const StreamingPark = () => {
       <div>
         <div className="font-medium mb-1">Streaming Part</div>
         <pre className="text-xs bg-black/5 dark:bg-white/10 rounded p-2">
-          {JSON.stringify(pokemonData, null, 2)}
+          {JSON.stringify(pokemonData?.name, null, 2)}
         </pre>
       </div>
     </div>

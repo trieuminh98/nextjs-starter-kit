@@ -1,7 +1,5 @@
 import { redirect } from 'next/navigation';
-
-// Check if running on client
-export const isClient = () => typeof window !== 'undefined';
+import { isClient } from './runtime';
 
 type RedirectTarget = Parameters<typeof redirect>[0];
 

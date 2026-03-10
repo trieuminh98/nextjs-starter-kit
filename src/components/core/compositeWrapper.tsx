@@ -4,7 +4,7 @@ import { ErrorBoundary as ReactErrorBoundary, FallbackProps } from 'react-error-
 import { useQueryClient } from '@tanstack/react-query';
 
 type ErrorFallbackProps = {
-  error: Error;
+  error: unknown;
   resetErrorBoundary: () => void;
 };
 
@@ -24,6 +24,8 @@ const ErrorFallback = ({ error: _error, resetErrorBoundary }: ErrorFallbackProps
     // Reset error boundary
     resetErrorBoundary();
   };
+
+  const errorMessage = _error instanceof Error ? _error.message : 'Unknown error';
 
   return (
     <div className="max-w-md w-full rounded-lg p-6 text-center">
@@ -54,7 +56,7 @@ const ErrorFallback = ({ error: _error, resetErrorBoundary }: ErrorFallbackProps
         <details className="text-xs text-gray-500 dark:text-gray-400 mb-4">
           <summary className="cursor-pointer">Error details</summary>
           <pre className="mt-2 p-2 bg-gray-100 dark:bg-gray-800 rounded text-left overflow-auto">
-            {_error?.message || 'Unknown error'}
+            {errorMessage}
           </pre>
         </details>
       )}
