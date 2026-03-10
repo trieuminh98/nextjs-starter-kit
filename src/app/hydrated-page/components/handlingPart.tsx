@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import { AppError } from '@/lib/error/app-error';
 
 const HandlingPart = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -34,41 +35,95 @@ const HandlingPart = () => {
   if (shouldError) {
     switch (errorType) {
       case 'network':
-        throw new Error('Failed to fetch user data: Network error');
+        throw new AppError({
+          code: 'NETWORK_ERROR',
+          message: 'Failed to fetch user data: Network error',
+        });
 
-      case 'json-parse':
-        JSON.parse('{"name": "John", "age": 30,}'); // Invalid JSON
+      case 'json-parse': {
+        try {
+          JSON.parse('{"name": "John", "age": 30,}'); // Invalid JSON
+        } catch (cause) {
+          throw new AppError({
+            code: 'UNKNOWN_ERROR',
+            message: 'Invalid JSON format in local parsing flow',
+            cause,
+          });
+        }
         break;
+      }
 
-      case 'undefined-property':
+      case 'undefined-property': {
         const userData: { name: string; email?: string } = { name: 'John' };
-        console.log(userData.email!.toUpperCase()); // userData.email is undefined
+        try {
+          console.log(userData.email!.toUpperCase()); // userData.email is undefined
+        } catch (cause) {
+          throw new AppError({
+            code: 'UNKNOWN_ERROR',
+            message: 'Client runtime error: accessed undefined property',
+            cause,
+          });
+        }
         break;
+      }
 
       case 'api-error':
-        throw new Error('HTTP 500: Internal Server Error');
+        throw new AppError({
+          code: 'HTTP_ERROR',
+          status: 500,
+          message: 'HTTP 500: Internal Server Error',
+        });
 
       case 'timeout':
-        throw new Error('Request timeout after 5 seconds');
+        throw new AppError({
+          code: 'TIMEOUT_ERROR',
+          message: 'Request timeout after 5 seconds',
+        });
 
       case 'network-error':
-        throw new Error('Network error: Failed to connect to server');
+        throw new AppError({
+          code: 'NETWORK_ERROR',
+          message: 'Network error: Failed to connect to server',
+        });
 
-      case 'invalid-json':
-        JSON.parse('invalid json response from API');
+      case 'invalid-json': {
+        try {
+          JSON.parse('invalid json response from API');
+        } catch (cause) {
+          throw new AppError({
+            code: 'UNKNOWN_ERROR',
+            message: 'API returned invalid JSON',
+            cause,
+          });
+        }
         break;
+      }
 
       case '404-error':
-        throw new Error('HTTP 404: Endpoint not found');
+        throw new AppError({
+          code: 'HTTP_ERROR',
+          status: 404,
+          message: 'HTTP 404: Endpoint not found',
+        });
 
       case '500-error':
-        throw new Error('HTTP 500: Internal Server Error');
+        throw new AppError({
+          code: 'HTTP_ERROR',
+          status: 500,
+          message: 'HTTP 500: Internal Server Error',
+        });
 
       case 'timeout-error':
-        throw new Error('Request timeout: Server took too long to respond');
+        throw new AppError({
+          code: 'TIMEOUT_ERROR',
+          message: 'Request timeout: Server took too long to respond',
+        });
 
       default:
-        throw new Error('Unknown error occurred');
+        throw new AppError({
+          code: 'UNKNOWN_ERROR',
+          message: 'Unknown error occurred',
+        });
     }
   }
 

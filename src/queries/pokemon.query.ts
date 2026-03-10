@@ -1,4 +1,5 @@
 import { queryOptions } from '@tanstack/react-query';
+import { AppError } from '@/lib/error/app-error';
 import { getPokemonDetail } from '@/services/pokemon.service';
 import { FetcherCustomOptions } from '@/lib/http/fetcher';
 
@@ -17,7 +18,11 @@ export const pokemonQueries = {
           `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`
         );
         if (!res.ok) {
-          throw new Error(`Failed to fetch pokemon list: ${res.status}`);
+          throw new AppError({
+            code: 'HTTP_ERROR',
+            status: res.status,
+            message: `Failed to fetch pokemon list: ${res.status}`,
+          });
         }
         return await res.json();
       },

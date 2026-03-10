@@ -1,3 +1,4 @@
+import { AppError } from '@/lib/error/app-error';
 import { fetcher } from '@/lib/http/fetcher';
 
 export type UserInfo = {
@@ -14,7 +15,11 @@ export const getUserInfo = async () => {
   });
 
   if (!res.data) {
-    throw new Error('User info response is empty');
+    throw new AppError({
+      code: 'EMPTY_RESPONSE',
+      message: 'User info response is empty',
+      status: res.code,
+    });
   }
 
   return res.data;

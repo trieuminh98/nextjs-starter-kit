@@ -1,3 +1,4 @@
+import { AppError } from '@/lib/error/app-error';
 import { FetcherCustomOptions, fetcher } from '@/lib/http/fetcher';
 import { Pokemon } from '@/types/pokemon';
 
@@ -19,7 +20,10 @@ export const createPokemon = async (pokemonData: Partial<Pokemon>): Promise<Poke
       sprites: pokemonData.sprites || { front_default: '' },
     } as Pokemon;
   } else {
-    throw new Error('Failed to create Pokemon');
+    throw new AppError({
+      code: 'UNKNOWN_ERROR',
+      message: 'Failed to create Pokemon',
+    });
   }
 };
 
@@ -39,7 +43,10 @@ export const updatePokemon = async (
       sprites: pokemonData.sprites || { front_default: '' },
     } as Pokemon;
   } else {
-    throw new Error('Failed to update Pokemon');
+    throw new AppError({
+      code: 'UNKNOWN_ERROR',
+      message: 'Failed to update Pokemon',
+    });
   }
 };
 
@@ -49,7 +56,10 @@ export const deletePokemon = async (): Promise<void> => {
   if (Math.random() > 0.1) {
     return;
   } else {
-    throw new Error('Failed to delete Pokemon');
+    throw new AppError({
+      code: 'UNKNOWN_ERROR',
+      message: 'Failed to delete Pokemon',
+    });
   }
 };
 
@@ -63,7 +73,11 @@ export const getPokemonDetail = async (id: string | number, options: PokemonDeta
     timeoutMs: options.timeoutMs,
   });
   if (!res.data) {
-    throw new Error('Pokemon detail response is empty');
+    throw new AppError({
+      code: 'EMPTY_RESPONSE',
+      message: 'Pokemon detail response is empty',
+      status: res.code,
+    });
   }
   return res.data;
 };

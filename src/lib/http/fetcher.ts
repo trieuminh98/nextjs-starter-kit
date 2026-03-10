@@ -1,7 +1,10 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { isServer } from '@/utils/runtime';
 import { toCamelCaseDeep, toSnakeCaseDeep } from './case-transform';
+import { createFetcherError, FetcherError, normalizeUnknownToFetcherError } from './fetcher-error';
 import { http } from './axiosIntance';
+
+export { FetcherError } from './fetcher-error';
 
 type AuthMode = 'none' | 'bearer';
 type HttpMethod = 'get' | 'post' | 'put' | 'delete' | 'patch';
@@ -41,18 +44,6 @@ export type FetcherResult<T> = {
   code: number;
   data: T | null;
 };
-
-export class FetcherError extends Error {
-  code: number;
-  data: unknown;
-
-  constructor(code: number, message: string, data: unknown = null) {
-    super(message);
-    this.name = 'FetcherError';
-    this.code = code;
-    this.data = data;
-  }
-}
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '';
 
@@ -182,13 +173,19 @@ const fetchWithNative = async <T>(
 ): Promise<FetcherResult<T>> => {
   const method = options.method ?? 'get';
   if (options.next && method !== 'get') {
-    throw new Error('`next` options are only supported for GET requests');
+    throw createFetcherError({
+      code: 'REQUEST_CONFIG_ERROR',
+      fallbackMessage: '`next` options are only supported for GET requests',
+    });
   }
   if (
     (method === 'get' || method === 'delete') &&
     (options.body !== undefined || options.data !== undefined)
   ) {
-    throw new Error('GET/DELETE requests must not include a request body');
+    throw createFetcherError({
+      code: 'REQUEST_CONFIG_ERROR',
+      fallbackMessage: 'GET/DELETE requests must not include a request body',
+    });
   }
 
   const snakeParams = options.params ? toSnakeCaseDeep(options.params) : undefined;
@@ -217,14 +214,21 @@ const fetchWithNative = async <T>(
 
     const payload = await parseFetchPayload(response);
     if (!response.ok) {
-      throw new FetcherError(
-        response.status,
-        `Request failed with status ${response.status}`,
-        toCamelCaseDeep(payload)
-      );
+      throw createFetcherError({
+        code: 'HTTP_ERROR',
+        status: response.status,
+        payload,
+        fallbackMessage: `Request failed with status ${response.status}`,
+      });
     }
 
     return normalizePayload<T>(response.status, payload);
+  } catch (error) {
+    if (error instanceof FetcherError) {
+      throw error;
+    }
+
+    throw normalizeUnknownToFetcherError(error, 'Network request failed');
   } finally {
     cleanup();
   }
@@ -239,7 +243,10 @@ const fetchWithAxios = async <T>(
     (method === 'get' || method === 'delete') &&
     (options.body !== undefined || options.data !== undefined)
   ) {
-    throw new Error('GET/DELETE requests must not include a request body');
+    throw createFetcherError({
+      code: 'REQUEST_CONFIG_ERROR',
+      fallbackMessage: 'GET/DELETE requests must not include a request body',
+    });
   }
   const snakeParams = options.params ? toSnakeCaseDeep(options.params) : undefined;
   const snakeData =
@@ -262,12 +269,30 @@ const fetchWithAxios = async <T>(
     const response = await http.request(config);
     return normalizePayload<T>(response.status, response.data);
   } catch (error) {
-    if (axios.isAxiosError(error) && error.response) {
-      const { status, data } = error.response;
-      throw new FetcherError(status, `Request failed with status ${status}`, toCamelCaseDeep(data));
+    if (error instanceof FetcherError) {
+      throw error;
     }
 
-    throw error;
+    if (axios.isAxiosError(error) && error.response) {
+      const { status, data } = error.response;
+      throw createFetcherError({
+        code: 'HTTP_ERROR',
+        status,
+        payload: data,
+        fallbackMessage: `Request failed with status ${status}`,
+        cause: error,
+      });
+    }
+
+    if (axios.isAxiosError(error) && error.code === 'ECONNABORTED') {
+      throw createFetcherError({
+        code: 'TIMEOUT_ERROR',
+        fallbackMessage: error.message || 'Request timeout',
+        cause: error,
+      });
+    }
+
+    throw normalizeUnknownToFetcherError(error, 'Network request failed');
   } finally {
     cleanup();
   }
@@ -282,7 +307,10 @@ export const fetcher = async <T = unknown>(
 
   if (auth === 'bearer') {
     if (isServer()) {
-      throw new Error('`auth: bearer` is client-only by design');
+      throw createFetcherError({
+        code: 'REQUEST_CONFIG_ERROR',
+        fallbackMessage: '`auth: bearer` is client-only by design',
+      });
     }
     return fetchWithAxios<T>(url, options);
   }

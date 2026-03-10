@@ -2,6 +2,7 @@
 import React, { PropsWithChildren, Suspense } from 'react';
 import { ErrorBoundary as ReactErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { useQueryClient } from '@tanstack/react-query';
+import { getErrorMessage } from '@/lib/error/app-error';
 
 type ErrorFallbackProps = {
   error: unknown;
@@ -25,7 +26,7 @@ const ErrorFallback = ({ error: _error, resetErrorBoundary }: ErrorFallbackProps
     resetErrorBoundary();
   };
 
-  const errorMessage = _error instanceof Error ? _error.message : 'Unknown error';
+  const errorMessage = getErrorMessage(_error, 'Unknown error');
 
   return (
     <div className="max-w-md w-full rounded-lg p-6 text-center">

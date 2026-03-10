@@ -2,6 +2,7 @@
 'use client';
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
+import { getErrorMessage } from '@/lib/error/app-error';
 import { login } from '@/services/auth.service';
 
 export default function LoginForm() {
@@ -22,12 +23,7 @@ export default function LoginForm() {
           router.push('/');
         }
       } catch (caughtError) {
-        const message = caughtError instanceof Error ? caughtError.message : 'Login failed';
-        try {
-          setError(JSON.parse(message).message);
-        } catch {
-          setError(message);
-        }
+        setError(getErrorMessage(caughtError, 'Login failed'));
       }
     });
   };
